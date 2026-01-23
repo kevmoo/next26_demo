@@ -2,9 +2,8 @@
 class GreetRequest {
   GreetRequest({required this.name});
 
-  factory GreetRequest.fromJson(Map<String, dynamic> json) {
-    return GreetRequest(name: json['name'] as String? ?? 'World');
-  }
+  factory GreetRequest.fromJson(Map<String, dynamic> json) =>
+      GreetRequest(name: json['name'] as String);
 
   final String name;
 
@@ -14,6 +13,9 @@ class GreetRequest {
 /// Response data for the greetTyped callable function.
 class GreetResponse {
   GreetResponse({required this.message});
+
+  factory GreetResponse.fromJson(Map<String, dynamic> json) =>
+      GreetResponse(message: json['message'] as String);
 
   final String message;
 
