@@ -1,0 +1,10 @@
+name: next26_demo_workspace
+
+environment:
+  sdk: ^3.10.0
+
+workspace:
+- server
+
+dev_dependencies:
+  dart_flutter_team_lints: ^3.0.0
