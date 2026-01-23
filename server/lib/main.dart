@@ -1,4 +1,5 @@
 import 'package:firebase_functions/firebase_functions.dart';
+import 'package:next26_shared/next26_shared.dart';
 
 void main(List<String> args) async {
   await fireUp(args, (firebase) {
@@ -77,30 +78,4 @@ void main(List<String> args) async {
 
     print('Functions registered successfully!');
   });
-}
-
-// =============================================================================
-// Data classes for typed callable functions
-// =============================================================================
-
-/// Request data for the greetTyped callable function.
-class GreetRequest {
-  GreetRequest({required this.name});
-
-  factory GreetRequest.fromJson(Map<String, dynamic> json) {
-    return GreetRequest(name: json['name'] as String? ?? 'World');
-  }
-
-  final String name;
-
-  Map<String, dynamic> toJson() => {'name': name};
-}
-
-/// Response data for the greetTyped callable function.
-class GreetResponse {
-  GreetResponse({required this.message});
-
-  final String message;
-
-  Map<String, dynamic> toJson() => {'message': message};
 }

@@ -9,6 +9,7 @@ dependencies:
   firebase_functions:
     # https://github.com/invertase/firebase_functions
     path: /Users/kevmoo/github/firebase_functions_dart
+  next26_shared: any # workspace
 
 dev_dependencies:
   build_runner: ^2.4.0
