@@ -4,6 +4,7 @@ environment:
   sdk: ^3.10.0
 
 workspace:
+- app
 - server
 - shared
 
