@@ -46,7 +46,7 @@ class AuthGate extends StatelessWidget {
           );
         }
 
-        return const MyHomePage(title: 'Flutter Demo Home Page');
+        return const CountView(title: 'Flutter Demo Home Page');
       },
     );
   }

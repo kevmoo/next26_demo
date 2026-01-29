@@ -1,9 +1,14 @@
 import 'dart:io';
 
 import 'package:firebase_functions/firebase_functions.dart';
+import 'package:jose/jose.dart';
 import 'package:next26_shared/next26_shared.dart';
 
+import 'src/storage_fun.dart';
+
 void main(List<String> args) async {
+  final storageFun = await createStorageFun();
+
   await fireUp(args, (firebase) {
     firebase.https.onRequest(
       name: 'helloWorld',
@@ -25,6 +30,38 @@ void main(List<String> args) async {
         return Response.ok(lines.join('\n'));
       },
     );
+
+    firebase.https.onCall(name: 'increment', (request, response) async {
+      // TODO: I'd expect auth to be populated here! Bug on the firebase bits?
+
+      final token = switch (request.rawRequest.headers['AUTHORIZATION']?.split(
+        ' ',
+      )) {
+        null => null,
+        ['Bearer', final t] => JsonWebToken.unverified(t),
+        _ => throw Exception('Invalid authorization header'),
+      };
+
+      if (token == null) {
+        // TODO: Can we throw certain types of errors to get status codes?
+        throw Exception('request not authorized');
+      }
+
+      final userId = token.claims['user_id'] as String?;
+
+      if (userId == null) {
+        throw Exception('request not authorized');
+      }
+
+      final result = await storageFun.increment(userId);
+
+      return CallableResult({
+        'data': {
+          'userCount': result.userCount,
+          'totalCount': result.totalCount,
+        },
+      });
+    });
 
     // Callable function with typed data using fromJson
     firebase.https.onCallWithData<GreetRequest, GreetResponse>(

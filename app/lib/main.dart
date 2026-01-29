@@ -1,9 +1,9 @@
-import 'package:app/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
-import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'firebase_options.dart';
 import 'src/auth_gate_widget.dart';
 
 void main() async {
@@ -12,14 +12,9 @@ void main() async {
   // Initialize Firebase with the options for the current platform (Web)
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  if (kDebugMode) {
-    try {
-      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-  }
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+  print('debug overrides set!');
 
   runApp(const MyApp());
 }
@@ -30,7 +25,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter Demo', home: const AuthGate());
+    return const MaterialApp(title: 'Flutter Demo', home: AuthGate());
   }
 }
-

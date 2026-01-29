@@ -10,3 +10,5 @@ workspace:
 
 dev_dependencies:
   dart_flutter_team_lints: ^3.0.0
+dependencies:
+  jose: ^0.3.5
