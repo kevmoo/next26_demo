@@ -29,6 +29,18 @@ class MyState {
           .call<Object?>();
 
       print(result.data);
+
+      if (result.data case {
+        'data': {
+          'userCount': final int userCount,
+          'totalCount': final int totalCount,
+        },
+      }) {
+        userCounter.value = userCount;
+        globalConuter.value = totalCount;
+      } else {
+        print('Unexpected data format: ${result.data}');
+      }
     } finally {
       _inFlight = false;
     }

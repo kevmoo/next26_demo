@@ -23,14 +23,24 @@ class CountView extends StatelessWidget {
           mainAxisAlignment: .center,
           children: [
             const Text('You have pushed the button this many times:'),
-            Text(
-              '${state.userCounter.value}',
-              style: Theme.of(context).textTheme.headlineMedium,
+            ValueListenableBuilder<int>(
+              valueListenable: state.userCounter,
+              builder: (context, count, child) {
+                return Text(
+                  '$count',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                );
+              },
             ),
             const Text('Everyone has bush the button this many times:'),
-            Text(
-              '${state.globalConuter.value}',
-              style: Theme.of(context).textTheme.headlineMedium,
+            ValueListenableBuilder<int>(
+              valueListenable: state.globalConuter,
+              builder: (context, count, child) {
+                return Text(
+                  '$count',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                );
+              },
             ),
           ],
         ),
