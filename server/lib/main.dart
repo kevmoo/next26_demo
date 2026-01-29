@@ -37,20 +37,19 @@ void main(List<String> args) async {
       final token = switch (request.rawRequest.headers['AUTHORIZATION']?.split(
         ' ',
       )) {
-        null => null,
+        null => throw UnauthenticatedError(
+          'AUTHORIZATION header was not present!',
+        ),
         ['Bearer', final t] => JsonWebToken.unverified(t),
-        _ => throw Exception('Invalid authorization header'),
+        _ => throw UnauthenticatedError(
+          'AUTHORIZATION header was not a Bearer token!',
+        ),
       };
-
-      if (token == null) {
-        // TODO: Can we throw certain types of errors to get status codes?
-        throw Exception('request not authorized');
-      }
 
       final userId = token.claims['user_id'] as String?;
 
       if (userId == null) {
-        throw Exception('request not authorized');
+        throw UnauthenticatedError('no user id in token!');
       }
 
       final result = await storageFun.increment(userId);
