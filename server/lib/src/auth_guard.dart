@@ -3,7 +3,10 @@ import 'package:jose/jose.dart';
 
 Future<String> authGuard(CallableRequest request) async {
   // if (request.auth == null) {
-  //   throw UnauthenticatedError('unauthenticated', 'Authentication required!');
+  //   throw UnauthenticatedError(
+  //     'unauthenticated',
+  //     'Authentication required!',
+  //   );
   // }
   // return request.auth!.uid;
 
