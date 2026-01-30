@@ -1,5 +1,4 @@
-import 'package:json_schema_builder/json_schema_builder.dart'
-    show ValidationError;
+import 'package:json_schema_builder/json_schema_builder.dart';
 
 class RequestValidationError extends Error {
   /// A user friendly message describing the error.

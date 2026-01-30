@@ -9,6 +9,7 @@ dependency_overrides:
   meta: ^1.18.0
 dependencies:
   json_annotation: ^4.10.0
+  json_schema_builder: ^0.1.2
 dev_dependencies:
   json_serializable: ^6.12.0
   build_runner: ^2.10.5

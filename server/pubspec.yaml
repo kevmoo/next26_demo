@@ -9,7 +9,6 @@ dependencies:
   dart_firebase_admin:
   firebase_functions: any
   googleapis_firestore:
-  json_schema_builder: ^0.1.2
   next26_shared: any # workspace
 
 dev_dependencies:
