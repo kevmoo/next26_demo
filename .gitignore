@@ -1,4 +1,4 @@
 .dart_tool
-pubspec.lock
+#pubspec.lock
 app/firebase.json
 app/lib/firebase_options.dart
