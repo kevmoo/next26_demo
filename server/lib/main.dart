@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:firebase_functions/firebase_functions.dart';
-import 'package:jose/jose.dart';
+import 'package:json_schema_builder/json_schema_builder.dart';
 import 'package:next26_shared/next26_shared.dart';
 
+import 'src/errors.dart';
 import 'src/storage_fun.dart';
 
 void main(List<String> args) async {
@@ -32,27 +33,14 @@ void main(List<String> args) async {
     );
 
     firebase.https.onCall(name: 'increment', (request, response) async {
-      // TODO: I'd expect auth to be populated here! Bug on the firebase bits?
-
-      final token = switch (request.rawRequest.headers['AUTHORIZATION']?.split(
-        ' ',
-      )) {
-        null => throw UnauthenticatedError(
-          'AUTHORIZATION header was not present!',
-        ),
-        ['Bearer', final t] => JsonWebToken.unverified(t),
-        _ => throw UnauthenticatedError(
-          'AUTHORIZATION header was not a Bearer token!',
-        ),
-      };
-
-      final userId = token.claims['user_id'] as String?;
-
-      if (userId == null) {
-        throw UnauthenticatedError('no user id in token!');
+      if (request.auth == null) {
+        throw UnauthenticatedError(
+          'unauthenticated',
+          'Authentication required!',
+        );
       }
 
-      final result = await storageFun.increment(userId);
+      final result = await storageFun.increment(request.auth!.uid);
 
       return CallableResult({
         'data': {
@@ -67,6 +55,16 @@ void main(List<String> args) async {
       name: 'greetTyped',
       fromJson: GreetRequest.fromJson,
       (request, response) async {
+        final requestSchema = S.fromMap(GreetRequest.jsonSchema);
+        final validationErrors = await requestSchema.validate(
+          request.data.toJson(),
+        );
+        if (validationErrors.isNotEmpty) {
+          throw RequestValidationError(
+            'Invalid request data!',
+            validationErrors,
+          );
+        }
         return GreetResponse(message: 'Hello, ${request.data.name}!');
       },
     );

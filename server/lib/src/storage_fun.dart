@@ -7,12 +7,14 @@ Future<StorageFun> createStorageFun() async {
   return StorageFun(app.firestore());
 }
 
+typedef CounterResult = ({int userCount, int totalCount});
+
 class StorageFun {
   final Firestore _firestore;
 
   StorageFun(this._firestore);
 
-  Future<({int userCount, int totalCount})> increment(String userId) async {
+  Future<CounterResult> increment(String userId) async {
     try {
       final newCount = await _firestore.runTransaction<int>((
         transaction,
@@ -23,17 +25,17 @@ class StorageFun {
 
         if (!snapshot.exists) {
           // Document doesn't exist, create it with count = 1
-          transaction.set(ref, {'count': 1});
+          transaction.set(ref, _saveCount(1));
           return 1;
         } else {
           final data = snapshot.data();
-          if (data != null && data.containsKey('count')) {
+          if (data != null && data.containsKey(_countKey)) {
             // Field exists, increment it
-            transaction.update(ref, {'count': const FieldValue.increment(1)});
-            return (data['count'] as int) + 1;
+            transaction.update(ref, {_countKey: const FieldValue.increment(1)});
+            return (_parseCount(data)) + 1;
           } else {
             // Field doesn't exist, initialize it to 1
-            transaction.update(ref, {'count': 1});
+            transaction.update(ref, _saveCount(1));
             return 1;
           }
         }
@@ -41,10 +43,13 @@ class StorageFun {
 
       final result = await _firestore
           .collection('users')
-          .aggregate(const sum('count'))
+          .aggregate(const sum(_countKey))
           .get();
 
-      return (userCount: newCount, totalCount: result.getSum('count')! as int);
+      return (
+        userCount: newCount,
+        totalCount: (result.getSum(_countKey) ?? 0).toInt(),
+      );
     } catch (e, stack) {
       print('Error incrementing counter for user: $userId');
       print(e);
@@ -52,4 +57,14 @@ class StorageFun {
       rethrow;
     }
   }
+}
+
+const _countKey = 'count';
+
+int _parseCount(Map<String, dynamic> data) {
+  return data[_countKey] as int;
+}
+
+Map<String, dynamic> _saveCount(int count) {
+  return {_countKey: count};
 }
