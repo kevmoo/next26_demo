@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_functions/firebase_functions.dart';
 import 'package:next26_shared/next26_shared.dart';
 
+import 'src/auth_guard.dart';
 import 'src/storage_fun.dart';
 
 void main(List<String> args) async {
@@ -31,14 +32,8 @@ void main(List<String> args) async {
     );
 
     firebase.https.onCall(name: 'increment', (request, response) async {
-      if (request.auth == null) {
-        throw UnauthenticatedError(
-          'unauthenticated',
-          'Authentication required!',
-        );
-      }
-
-      final result = await storageFun.increment(request.auth!.uid);
+      final userId = await authGuard(request);
+      final result = await storageFun.increment(userId);
 
       return CallableResult({
         'data': {
