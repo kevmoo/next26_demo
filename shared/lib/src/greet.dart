@@ -15,10 +15,10 @@ class GreetRequest {
 
   Map<String, dynamic> toJson() => _$GreetRequestToJson(this);
 
-  static const jsonSchema = _$GreetRequestJsonSchema;
+  static final jsonSchema = S.fromMap(_$GreetRequestJsonSchema);
 
   static Future<List<ValidationError>> validate(Map<String, dynamic> data) =>
-      _validate(jsonSchema, data);
+      jsonSchema.validate(data);
 }
 
 /// Response data for the greetTyped callable function.
@@ -33,17 +33,8 @@ class GreetResponse {
 
   Map<String, dynamic> toJson() => _$GreetResponseToJson(this);
 
-  static const jsonSchema = _$GreetResponseJsonSchema;
+  static final jsonSchema = S.fromMap(_$GreetResponseJsonSchema);
 
   static Future<List<ValidationError>> validate(Map<String, dynamic> data) =>
-      _validate(jsonSchema, data);
-}
-
-Future<List<ValidationError>> _validate(
-  Map<String, dynamic> schema,
-  Map<String, dynamic> data,
-) async {
-  final requestSchema = S.fromMap(schema);
-  final validationErrors = await requestSchema.validate(data);
-  return validationErrors;
+      jsonSchema.validate(data);
 }
