@@ -4,10 +4,10 @@ import 'package:firebase_functions/firebase_functions.dart';
 import 'package:next26_shared/next26_shared.dart';
 
 import 'src/auth_guard.dart';
-import 'src/storage_fun.dart';
+import 'src/storage_controller.dart';
 
 void main(List<String> args) async {
-  final storageFun = await createStorageFun();
+  final storageController = await createStorageController();
 
   await fireUp(args, (firebase) {
     firebase.https.onRequest(
@@ -33,7 +33,7 @@ void main(List<String> args) async {
 
     firebase.https.onCall(name: 'increment', (request, response) async {
       final userId = await authGuard(request);
-      final result = await storageFun.increment(userId);
+      final result = await storageController.increment(userId);
 
       return CallableResult({
         'data': {

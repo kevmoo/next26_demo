@@ -1,18 +1,18 @@
 import 'package:dart_firebase_admin/dart_firebase_admin.dart';
 import 'package:googleapis_firestore/googleapis_firestore.dart';
 
-Future<StorageFun> createStorageFun() async {
+Future<StorageController> createStorageController() async {
   final app = FirebaseApp.initializeApp();
 
-  return StorageFun(app.firestore());
+  return StorageController._(app.firestore());
 }
 
 typedef CounterResult = ({int userCount, int totalCount});
 
-class StorageFun {
+class StorageController {
   final Firestore _firestore;
 
-  StorageFun(this._firestore);
+  StorageController._(this._firestore);
 
   Future<CounterResult> increment(String userId) async {
     try {
