@@ -26,6 +26,8 @@ class CounterState {
   final _incrementController = StreamController<void>.broadcast();
   final _subscriptions = <StreamSubscription>[];
 
+  // TODO: consider creating shared constants for collection and field names.
+  // ...and putting them in the shared package.
   void _initFirestore() {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid != null) {
@@ -63,10 +65,13 @@ class CounterState {
     }
   }
 
+  // TODO: consider making this a nullable-property and disabling
+  // the button when we're waiting for the function to complete.
   void increment() {
     _incrementController.add(null);
   }
 
+  // TODO: consider dropping this and just rely on the firestore listeners
   void _handleIncrementResult(HttpsCallableResult<Object?> result) {
     if (result.data case {
       'data': {
