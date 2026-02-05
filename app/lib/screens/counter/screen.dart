@@ -43,12 +43,13 @@ class _CounterScreenState extends State<CounterScreen> {
                 );
               },
             ),
+            const SizedBox(height: 32),
             const Text('Everyone has bush the button this many times:'),
-            ValueListenableBuilder<int>(
+            ValueListenableBuilder<int?>(
               valueListenable: state.globalCounter,
               builder: (context, count, child) {
                 return Text(
-                  '$count',
+                  count == null ? '...' : '$count',
                   style: Theme.of(context).textTheme.headlineMedium,
                 );
               },

@@ -12,7 +12,8 @@ final router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const CounterScreen(title: 'Counter Demo'),
+      builder: (context, state) =>
+          const CounterScreen(title: 'Firebase Multi-player Counter Demo'),
     ),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
   ],
