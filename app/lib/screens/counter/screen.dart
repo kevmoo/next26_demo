@@ -44,7 +44,7 @@ class _CounterScreenState extends State<CounterScreen> {
               },
             ),
             const SizedBox(height: 32),
-            const Text('Everyone has bush the button this many times:'),
+            const Text('Everyone has pushed the button this many times:'),
             ValueListenableBuilder<int?>(
               valueListenable: state.globalCounter,
               builder: (context, count, child) {
@@ -54,13 +54,15 @@ class _CounterScreenState extends State<CounterScreen> {
                 );
               },
             ),
+            const SizedBox(height: 32),
+            FloatingActionButton.extended(
+              onPressed: state.increment,
+              tooltip: 'Increment',
+              icon: const Icon(Icons.add),
+              label: const Text('Increment'),
+            ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: state.increment,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
