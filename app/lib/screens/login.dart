@@ -8,15 +8,6 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignInScreen(
       providers: [EmailAuthProvider()],
-      headerBuilder: (context, constraints, shrinkOffset) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: Image.asset('flutter_assets/dash.png'),
-          ),
-        );
-      },
       subtitleBuilder: (context, action) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
