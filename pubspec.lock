@@ -165,10 +165,10 @@ packages:
     dependency: transitive
     description:
       name: characters
-      sha256: f71061c654a3380576a52b451dd5532377954cf9dbd272a78fc8479606670803
+      sha256: faf38497bda5ead2a8c7615f4f7939df04333478bf32e4173fcb06d428b5716b
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.4.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -254,8 +254,8 @@ packages:
     description:
       path: "packages/dart_firebase_admin"
       ref: next
-      resolved-ref: d71e3313cfe3641f4eef764c79c7e5b83a504b0e
-      url: "https://github.com/kevmoo/dart_firebase_admin"
+      resolved-ref: "09b3e40623699ffc6e9c95afe7e2e2bf504110c1"
+      url: "https://github.com/invertase/dart_firebase_admin"
     source: git
     version: "0.4.1"
   dart_flutter_team_lints:
@@ -398,9 +398,9 @@ packages:
     dependency: "direct overridden"
     description:
       path: "."
-      ref: local_bits
-      resolved-ref: "9f9727db6e1613d54e1859065a0da3ef7ee63365"
-      url: "https://github.com/kevmoo/firebase_functions"
+      ref: HEAD
+      resolved-ref: "31460d6b7b4e9b006180c3515a8502f9872d34e1"
+      url: "https://github.com/invertase/firebase_functions.git"
     source: git
     version: "0.1.0"
   firebase_ui_auth:
@@ -491,10 +491,10 @@ packages:
     dependency: transitive
     description:
       name: go_router
-      sha256: eff94d2a6fc79fa8b811dde79c7549808c2346037ee107a1121b4a644c745f2a
+      sha256: "7974313e217a7771557add6ff2238acb63f635317c35fa590d348fb238f00896"
       url: "https://pub.dev"
     source: hosted
-    version: "17.0.1"
+    version: "17.1.0"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -524,8 +524,8 @@ packages:
     description:
       path: "packages/googleapis_auth_utils"
       ref: next
-      resolved-ref: d71e3313cfe3641f4eef764c79c7e5b83a504b0e
-      url: "https://github.com/kevmoo/dart_firebase_admin"
+      resolved-ref: "09b3e40623699ffc6e9c95afe7e2e2bf504110c1"
+      url: "https://github.com/invertase/dart_firebase_admin.git"
     source: git
     version: "0.1.0"
   googleapis_beta:
@@ -541,8 +541,8 @@ packages:
     description:
       path: "packages/googleapis_firestore"
       ref: next
-      resolved-ref: d71e3313cfe3641f4eef764c79c7e5b83a504b0e
-      url: "https://github.com/kevmoo/dart_firebase_admin"
+      resolved-ref: "09b3e40623699ffc6e9c95afe7e2e2bf504110c1"
+      url: "https://github.com/invertase/dart_firebase_admin.git"
     source: git
     version: "0.1.0"
   googleapis_storage:
@@ -550,8 +550,8 @@ packages:
     description:
       path: "packages/googleapis_storage"
       ref: next
-      resolved-ref: d71e3313cfe3641f4eef764c79c7e5b83a504b0e
-      url: "https://github.com/kevmoo/dart_firebase_admin"
+      resolved-ref: "09b3e40623699ffc6e9c95afe7e2e2bf504110c1"
+      url: "https://github.com/invertase/dart_firebase_admin.git"
     source: git
     version: "0.1.0"
   graphs:
@@ -686,10 +686,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: a5e2b223cb7c9c8efdc663ef484fdd95bb243bff242ef5b13e26883547fce9a0
+      sha256: "12f842a479589fea194fe5c5a3095abc7be0c1f2ddfa9a0e76aed1dbd26a87df"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0"
+    version: "6.1.0"
   logging:
     dependency: transitive
     description:
@@ -702,26 +702,26 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: dc58c723c3c24bf8d3e2d3ad3f2f9d7bd9cf43ec6feaa64181775e60190153f2
+      sha256: "12956d0ad8390bbcc63ca2e1469c0619946ccb52809807067a7020d57e647aa6"
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.17"
+    version: "0.12.18"
   material_color_utilities:
     dependency: transitive
     description:
       name: material_color_utilities
-      sha256: f7142bb1154231d7ea5f96bc7bde4bda2a0945d2806bb11670e30b850d56bdec
+      sha256: "9c337007e82b1889149c82ed242ed1cb24a66044e30979c44912381e9be4c48b"
       url: "https://pub.dev"
     source: hosted
-    version: "0.11.1"
+    version: "0.13.0"
   meta:
     dependency: "direct overridden"
     description:
       name: meta
-      sha256: "1741988757a65eb6b36abe716829688cf01910bbf91c34354ff7ec1c3de2b349"
+      sha256: "9f29b9bcc8ee287b1a31e0d01be0eae99a930dbffdaecf04b3f3d82a969f296f"
       url: "https://pub.dev"
     source: hosted
-    version: "1.18.0"
+    version: "1.18.1"
   mime:
     dependency: transitive
     description:
@@ -939,10 +939,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: ab2726c1a94d3176a45960b6234466ec367179b87dd74f1611adb1f3b5fb9d55
+      sha256: "93167629bfc610f71560ab9312acdda4959de4df6fac7492c89ff0d3886f6636"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.7"
+    version: "0.7.9"
   typed_data:
     dependency: transitive
     description:
