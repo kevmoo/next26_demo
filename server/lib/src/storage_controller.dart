@@ -41,15 +41,28 @@ class StorageController {
         }
       });
 
-      final result = await _firestore
+      final globalCountSnapshot = await _firestore
           .collection('users')
           .aggregate(const sum(_countKey))
           .get();
 
-      return (
-        userCount: newCount,
-        totalCount: (result.getSum(_countKey) ?? 0).toInt(),
-      );
+      var globalCountRaw = globalCountSnapshot.getSum(_countKey);
+
+      if (globalCountRaw == null || globalCountRaw < 1) {
+        // TODO: we don't want to crash here, but we should have better logging
+        print('Very weird value for global count: "$globalCountRaw');
+        globalCountRaw = 1;
+      }
+
+      final globalCountValue = globalCountRaw.toInt();
+
+      final globalVars = _firestore.collection('global').doc('vars');
+
+      // TODO: Investigate a more efficient way to do this
+      // Maybe with a trigger?
+      await globalVars.set({'totalCount': globalCountValue});
+
+      return (userCount: newCount, totalCount: globalCountValue);
     } catch (e, stack) {
       print('Error incrementing counter for user: $userId');
       print(e);
