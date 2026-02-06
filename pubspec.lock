@@ -141,10 +141,10 @@ packages:
     dependency: transitive
     description:
       name: build_runner
-      sha256: b4d854962a32fd9f8efc0b76f98214790b833af8b2e9b2df6bfc927c0415a072
+      sha256: ac78098de97893812b7aff1154f29008fa2464cad9e8e7044d39bc905dad4fbc
       url: "https://pub.dev"
     source: hosted
-    version: "2.10.5"
+    version: "2.11.0"
   built_collection:
     dependency: transitive
     description:
@@ -423,7 +423,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "31460d6b7b4e9b006180c3515a8502f9872d34e1"
+      resolved-ref: "52b018a99013683be8d12c6b28747f47879882f6"
       url: "https://github.com/invertase/firebase_functions.git"
     source: git
     version: "0.1.0"
@@ -915,10 +915,10 @@ packages:
     dependency: transitive
     description:
       name: source_span
-      sha256: "254ee5351d6cb365c859e20ee823c3bb479bf4a293c22d17a9f1bf144ce86f7c"
+      sha256: "56a02f1f4cd1a2d96303c0144c93bd6d909eea6bee6bf5a0e0b685edbd4c47ab"
       url: "https://pub.dev"
     source: hosted
-    version: "1.10.1"
+    version: "1.10.2"
   stack_trace:
     dependency: transitive
     description:
@@ -1079,6 +1079,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
+  yaml_edit:
+    dependency: transitive
+    description:
+      name: yaml_edit
+      sha256: ec709065bb2c911b336853b67f3732dd13e0336bd065cc2f1061d7610ddf45e3
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.3"
 sdks:
   dart: ">=3.10.0 <4.0.0"
   flutter: ">=3.35.0"
