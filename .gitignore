@@ -2,3 +2,4 @@
 #pubspec.lock
 app/firebase.json
 app/lib/firebase_options.dart
+.vscode
