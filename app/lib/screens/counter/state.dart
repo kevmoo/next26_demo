@@ -73,14 +73,8 @@ class CounterState {
 
   // TODO: consider dropping this and just rely on the firestore listeners
   void _handleIncrementResult(HttpsCallableResult<Object?> result) {
-    if (result.data case {
-      'data': {
-        'userCount': final int userCount,
-        'totalCount': final int totalCount,
-      },
-    }) {
-      userCounter.value = userCount;
-      globalCounter.value = totalCount;
+    if (result.data case Map<String, Object?> data) {
+      print('got data! $data');
     } else {
       print('Unexpected data format: ${result.data}');
     }
