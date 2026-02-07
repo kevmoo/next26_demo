@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:next26_shared/next26_shared.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 typedef GlobalData = ({int totalUsers, int totalClicks});
@@ -27,6 +28,10 @@ class CounterState {
 
   final _incrementController = StreamController<void>.broadcast();
   final _subscriptions = <StreamSubscription>[];
+  final _responseController = StreamController<IncrementResponse>.broadcast();
+
+  Stream<IncrementResponse> get incrementResponseStream =>
+      _responseController.stream;
 
   // TODO: consider creating shared constants for collection and field names.
   // ...and putting them in the shared package.
@@ -76,16 +81,17 @@ class CounterState {
     _incrementController.add(null);
   }
 
-  // TODO: consider dropping this and just rely on the firestore listeners
   void _handleIncrementResult(HttpsCallableResult<Object?> result) {
-    if (result.data case Map<String, Object?> data) {
-      print('got data! $data');
+    if (result.data case {'data': Map<String, Object?> data}) {
+      final response = IncrementResponse.fromJson(data);
+      _responseController.add(response);
     } else {
       print('Unexpected data format: ${result.data}');
     }
   }
 
   void dispose() {
+    _responseController.close();
     _incrementController.close();
     for (final sub in _subscriptions) {
       sub.cancel();

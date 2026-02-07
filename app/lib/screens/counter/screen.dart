@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:next26_shared/next26_shared.dart';
 
 import 'state.dart';
 
@@ -14,9 +17,37 @@ class CounterScreen extends StatefulWidget {
 
 class _CounterScreenState extends State<CounterScreen> {
   final state = CounterState();
+  late final StreamSubscription<IncrementResponse> _sub;
+
+  @override
+  void initState() {
+    super.initState();
+
+    ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
+    _snackBarController;
+
+    _sub = state.incrementResponseStream.listen((response) {
+      if (!mounted) return;
+
+      final message = response.message;
+      if (message != null && _snackBarController == null) {
+        _snackBarController = ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: response.success ? null : Colors.red,
+          ),
+        );
+
+        _snackBarController?.closed.then((reason) {
+          _snackBarController = null;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
+    _sub.cancel();
     state.dispose();
     super.dispose();
   }
