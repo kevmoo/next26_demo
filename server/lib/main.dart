@@ -37,12 +37,7 @@ void main(List<String> args) async {
 
       final result = await storageController.increment(userId);
 
-      return CallableResult({
-        'data': {
-          'userCount': result.userCount,
-          'totalCount': result.totalCount,
-        },
-      });
+      return CallableResult({'data': result.toJson()});
     });
 
     // Callable function with typed data using fromJson

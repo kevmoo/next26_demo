@@ -38,3 +38,21 @@ class GreetResponse {
   static Future<List<ValidationError>> validate(Map<String, dynamic> data) =>
       jsonSchema.validate(data);
 }
+
+@JsonSerializable()
+class IncrementResponse {
+  final bool success;
+  final String? message;
+
+  const IncrementResponse({required this.success, this.message});
+
+  factory IncrementResponse.success() => const IncrementResponse(success: true);
+
+  factory IncrementResponse.failure(String message) =>
+      IncrementResponse(success: false, message: message);
+
+  factory IncrementResponse.fromJson(Map<String, dynamic> json) =>
+      _$IncrementResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$IncrementResponseToJson(this);
+}

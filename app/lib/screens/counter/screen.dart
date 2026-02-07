@@ -44,13 +44,19 @@ class _CounterScreenState extends State<CounterScreen> {
               },
             ),
             const SizedBox(height: 32),
-            const Text('Everyone has pushed the button this many times:'),
-            ValueListenableBuilder<int?>(
+            ValueListenableBuilder<GlobalData?>(
               valueListenable: state.globalCounter,
               builder: (context, count, child) {
                 return Text(
-                  count == null ? '...' : '$count',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  count == null
+                      ? '...'
+                      : [
+                          _Plurals.people.getFor(count.totalUsers),
+                          _Plurals.has.getFor(count.totalUsers, noCount: true),
+                          'pushed the button ',
+                          _Plurals.time.getFor(count.totalClicks),
+                        ].join(' '),
+                  style: Theme.of(context).textTheme.headlineSmall,
                 );
               },
             ),
@@ -65,5 +71,23 @@ class _CounterScreenState extends State<CounterScreen> {
         ),
       ),
     );
+  }
+}
+
+enum _Plurals {
+  people(singular: 'person', plural: 'people'),
+  time(singular: 'time', plural: 'times'),
+  has(singular: 'has', plural: 'have');
+
+  final String singular;
+  final String plural;
+
+  const _Plurals({required this.singular, required this.plural});
+
+  String getFor(int count, {bool noCount = false}) {
+    if (noCount) {
+      return count == 1 ? singular : plural;
+    }
+    return '$count ${count == 1 ? singular : plural}';
   }
 }

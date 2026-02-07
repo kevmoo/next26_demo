@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+typedef GlobalData = ({int totalUsers, int totalClicks});
+
 class CounterState {
   CounterState() {
     _incrementController.stream
@@ -21,7 +23,7 @@ class CounterState {
   }
 
   final ValueNotifier<int> userCounter = ValueNotifier(0);
-  final ValueNotifier<int?> globalCounter = ValueNotifier(null);
+  final ValueNotifier<GlobalData?> globalCounter = ValueNotifier(null);
 
   final _incrementController = StreamController<void>.broadcast();
   final _subscriptions = <StreamSubscription>[];
@@ -52,11 +54,14 @@ class CounterState {
             .doc('vars')
             .snapshots()
             .listen((snapshot) {
-              if (snapshot.exists) {
-                final data = snapshot.data();
-                if (data != null && data.containsKey('totalCount')) {
-                  globalCounter.value = data['totalCount'] as int;
-                }
+              if (snapshot.data() case {
+                'totalCount': int totalClicks,
+                'totalUsers': int totalUsers,
+              }) {
+                globalCounter.value = (
+                  totalUsers: totalUsers,
+                  totalClicks: totalClicks,
+                );
               }
             }),
       );
