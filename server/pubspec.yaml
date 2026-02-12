@@ -26,11 +26,6 @@ dependency_overrides:
     git:
       url: https://github.com/invertase/firebase_functions.git
 
-  googleapis_auth_utils:
-    git:
-      url: https://github.com/invertase/dart_firebase_admin.git
-      ref: next
-      path: packages/googleapis_auth_utils
   googleapis_firestore:
     git:
       url: https://github.com/invertase/dart_firebase_admin.git
