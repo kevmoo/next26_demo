@@ -278,7 +278,7 @@ packages:
     description:
       path: "packages/dart_firebase_admin"
       ref: next
-      resolved-ref: "09b3e40623699ffc6e9c95afe7e2e2bf504110c1"
+      resolved-ref: "2fc55849989e008e4c7ab945867c567530b815a1"
       url: "https://github.com/invertase/dart_firebase_admin"
     source: git
     version: "0.4.1"
@@ -423,7 +423,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "52b018a99013683be8d12c6b28747f47879882f6"
+      resolved-ref: ac82ce39007e52b4f7a8bfcae0ce5ee86c7fea63
       url: "https://github.com/invertase/firebase_functions.git"
     source: git
     version: "0.1.0"
@@ -548,7 +548,7 @@ packages:
     description:
       path: "packages/googleapis_auth_utils"
       ref: next
-      resolved-ref: "09b3e40623699ffc6e9c95afe7e2e2bf504110c1"
+      resolved-ref: "2fc55849989e008e4c7ab945867c567530b815a1"
       url: "https://github.com/invertase/dart_firebase_admin.git"
     source: git
     version: "0.1.0"
@@ -565,7 +565,7 @@ packages:
     description:
       path: "packages/googleapis_firestore"
       ref: next
-      resolved-ref: "09b3e40623699ffc6e9c95afe7e2e2bf504110c1"
+      resolved-ref: "2fc55849989e008e4c7ab945867c567530b815a1"
       url: "https://github.com/invertase/dart_firebase_admin.git"
     source: git
     version: "0.1.0"
@@ -574,7 +574,7 @@ packages:
     description:
       path: "packages/googleapis_storage"
       ref: next
-      resolved-ref: "09b3e40623699ffc6e9c95afe7e2e2bf504110c1"
+      resolved-ref: "2fc55849989e008e4c7ab945867c567530b815a1"
       url: "https://github.com/invertase/dart_firebase_admin.git"
     source: git
     version: "0.1.0"

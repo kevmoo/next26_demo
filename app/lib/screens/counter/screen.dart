@@ -24,22 +24,22 @@ class _CounterScreenState extends State<CounterScreen> {
     super.initState();
 
     ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
-    _snackBarController;
+    snackBarController;
 
     _sub = state.incrementResponseStream.listen((response) {
       if (!mounted) return;
 
       final message = response.message;
-      if (message != null && _snackBarController == null) {
-        _snackBarController = ScaffoldMessenger.of(context).showSnackBar(
+      if (message != null && snackBarController == null) {
+        snackBarController = ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
             backgroundColor: response.success ? null : Colors.red,
           ),
         );
 
-        _snackBarController?.closed.then((reason) {
-          _snackBarController = null;
+        snackBarController?.closed.then((reason) {
+          snackBarController = null;
         });
       }
     });
