@@ -28,30 +28,8 @@ class StorageController {
         } else {
           final data = snapshot.data();
           if (data != null && data.containsKey(_countKey)) {
-            // Check for rate limiting
-
-            if (data case {
-              _lastIncrementKey: Timestamp(seconds: final lastSeconds),
-            }) {
-              final timeSinceLastIncrement =
-                  Timestamp.now().seconds - lastSeconds;
-
-              if (timeSinceLastIncrement < rateLimitSeconds) {
-                // just to be mean, update the last increment time anyway
-                transaction.update(ref, {
-                  _lastIncrementKey: FieldValue.serverTimestamp,
-                });
-                return IncrementResponse.failure(
-                  'You must wait $rateLimitSeconds seconds between increments.',
-                );
-              }
-            }
-
             // Field exists, increment it
-            transaction.update(ref, {
-              _countKey: const FieldValue.increment(1),
-              _lastIncrementKey: FieldValue.serverTimestamp,
-            });
+            transaction.update(ref, {_countKey: const FieldValue.increment(1)});
           } else {
             // Field doesn't exist, initialize it to 1
             transaction.update(ref, _saveCount(1));
@@ -98,8 +76,7 @@ class StorageController {
 }
 
 const _countKey = 'count';
-const _lastIncrementKey = 'lastIncrement';
 
 Map<String, dynamic> _saveCount(int count) {
-  return {_countKey: count, _lastIncrementKey: FieldValue.serverTimestamp};
+  return {_countKey: count};
 }
