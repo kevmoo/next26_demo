@@ -30,7 +30,7 @@ void main(List<String> args) async {
       },
     );
 
-    firebase.https.onCall(name: 'increment', (request, response) async {
+    firebase.https.onCall(name: incrementCallable, (request, response) async {
       final userId =
           request.auth?.uid ??
           (throw UnauthenticatedError('User is not signed-in!'));

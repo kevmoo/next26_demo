@@ -18,7 +18,7 @@ class StorageController {
       final response = await _firestore.runTransaction<IncrementResponse>((
         transaction,
       ) async {
-        final ref = _firestore.collection('users').doc(userId);
+        final ref = _firestore.collection(usersCollection).doc(userId);
 
         final snapshot = await transaction.get(ref);
 
@@ -27,9 +27,11 @@ class StorageController {
           transaction.set(ref, _saveCount(1));
         } else {
           final data = snapshot.data();
-          if (data != null && data.containsKey(_countKey)) {
+          if (data != null && data.containsKey(countField)) {
             // Field exists, increment it
-            transaction.update(ref, {_countKey: const FieldValue.increment(1)});
+            transaction.update(ref, {
+              countField: const FieldValue.increment(1),
+            });
           } else {
             // Field doesn't exist, initialize it to 1
             transaction.update(ref, _saveCount(1));
@@ -40,11 +42,11 @@ class StorageController {
 
       if (response.success) {
         final globalCountSnapshot = await _firestore
-            .collection('users')
-            .aggregate(const sum(_countKey), const count())
+            .collection(usersCollection)
+            .aggregate(const sum(countField), const count())
             .get();
 
-        var globalCountRaw = globalCountSnapshot.getSum(_countKey);
+        var globalCountRaw = globalCountSnapshot.getSum(countField);
 
         if (globalCountRaw == null || globalCountRaw < 1) {
           // TODO: we don't want to crash here, but we should log
@@ -55,13 +57,15 @@ class StorageController {
         final globalCountValue = globalCountRaw.toInt();
         final userCountValue = globalCountSnapshot.count;
 
-        final globalVars = _firestore.collection('global').doc('vars');
+        final globalVars = _firestore
+            .collection(globalCollection)
+            .doc(varsDocument);
 
         // TODO: Investigate a more efficient way to do this
         // Maybe with a trigger?
         await globalVars.set({
-          'totalCount': globalCountValue,
-          'totalUsers': userCountValue,
+          totalCountField: globalCountValue,
+          totalUsersField: userCountValue,
         });
       }
 
@@ -75,8 +79,6 @@ class StorageController {
   }
 }
 
-const _countKey = 'count';
-
 Map<String, dynamic> _saveCount(int count) {
-  return {_countKey: count};
+  return {countField: count};
 }

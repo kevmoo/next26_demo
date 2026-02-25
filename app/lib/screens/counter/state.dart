@@ -14,7 +14,7 @@ class CounterState {
     _incrementController.stream
         .switchMap(
           (_) => FirebaseFunctions.instance
-              .httpsCallable('increment')
+              .httpsCallable(incrementCallable)
               .call<Object?>()
               .asStream(),
         )
@@ -40,14 +40,14 @@ class CounterState {
     if (uid != null) {
       _subscriptions.add(
         FirebaseFirestore.instance
-            .collection('users')
+            .collection(usersCollection)
             .doc(uid)
             .snapshots()
             .listen((snapshot) {
               if (snapshot.exists) {
                 final data = snapshot.data();
-                if (data != null && data.containsKey('count')) {
-                  userCounter.value = data['count'] as int;
+                if (data != null && data.containsKey(countField)) {
+                  userCounter.value = data[countField] as int;
                 }
               }
             }),
@@ -55,13 +55,13 @@ class CounterState {
 
       _subscriptions.add(
         FirebaseFirestore.instance
-            .collection('global')
-            .doc('vars')
+            .collection(globalCollection)
+            .doc(varsDocument)
             .snapshots()
             .listen((snapshot) {
               if (snapshot.data() case {
-                'totalCount': int totalClicks,
-                'totalUsers': int totalUsers,
+                totalCountField: int totalClicks,
+                totalUsersField: int totalUsers,
               }) {
                 globalCounter.value = (
                   totalUsers: totalUsers,
