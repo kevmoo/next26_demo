@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: "0e4db51a88671b676adc09e923ffebd765a1f0c2b04dc19b08b35a335de2972c"
+      sha256: "3b19a47f6ea7c2632760777c78174f47f6aec1e05f0cd611380d4593b8af1dbc"
       url: "https://pub.dev"
     source: hosted
-    version: "95.0.0"
+    version: "96.0.0"
   _flutterfire_internals:
     dependency: transitive
     description:
@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "3d577a36cde804a46bd1d89e673c3d87c3538c49a39c35d4d336f7760b48c319"
+      sha256: "0c516bc4ad36a1a75759e54d5047cb9d15cded4459df01aa35a0b5ec7db2c2a0"
       url: "https://pub.dev"
     source: hosted
-    version: "10.1.0"
+    version: "10.2.0"
   app_links:
     dependency: transitive
     description:
@@ -157,10 +157,10 @@ packages:
     dependency: transitive
     description:
       name: built_value
-      sha256: "7931c90b84bc573fef103548e354258ae4c9d28d140e41961df6843c5d60d4d8"
+      sha256: "6ae8a6435a8c6520c7077b107e77f1fb4ba7009633259a4d49a8afd8e7efc5e9"
       url: "https://pub.dev"
     source: hosted
-    version: "8.12.3"
+    version: "8.12.4"
   characters:
     dependency: transitive
     description:
@@ -423,7 +423,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6daf4791cbf67e31dc7ee433f18d05a56510a537"
+      resolved-ref: b00fcc0508a6e5633c4bb730b769d51e2649d446
       url: "https://github.com/invertase/firebase_functions.git"
     source: git
     version: "0.1.0"
@@ -813,10 +813,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: "6323a5b0fa688b6a010df4905a56b00181479e6d10534cecfecede2aa55add61"
+      sha256: "185ef7606574f789b40f289c233efa52e96dead518aed988e040a10737febb07"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.3"
+    version: "6.5.0"
   protobuf:
     dependency: transitive
     description:
