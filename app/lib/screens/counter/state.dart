@@ -82,9 +82,8 @@ class CounterState {
   }
 
   void _handleIncrementResult(HttpsCallableResult<Object?> result) {
-    if (result.data case {'data': Map<String, Object?> data}) {
-      final response = IncrementResponse.fromJson(data);
-      _responseController.add(response);
+    if (result.data case String data) {
+      print('Incremented: $data');
     } else {
       print('Unexpected data format: ${result.data}');
     }

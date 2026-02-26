@@ -12,9 +12,9 @@ void main(List<String> args) async {
           request.auth?.uid ??
           (throw UnauthenticatedError('User is not signed-in!'));
 
-      final result = await storageController.increment(userId);
+      await storageController.increment(userId);
 
-      return CallableResult({'data': result.toJson()});
+      return CallableResult('success');
     });
 
     print('Functions registered successfully!');

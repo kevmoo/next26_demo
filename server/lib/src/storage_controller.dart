@@ -13,15 +13,10 @@ class StorageController {
 
   StorageController._(this._firestore);
 
-  Future<IncrementResponse> increment(String userId) async {
+  Future<void> increment(String userId) async {
     try {
-      final response = await _increment(userId);
-
-      if (response.success) {
-        await _updateGlobalCount();
-      }
-
-      return response;
+      await _increment(userId);
+      await _updateGlobalCount();
     } catch (e, stack) {
       print('Error incrementing counter for user: $userId');
       print(e);
@@ -30,10 +25,8 @@ class StorageController {
     }
   }
 
-  Future<IncrementResponse> _increment(String userId) async {
-    final response = await _firestore.runTransaction<IncrementResponse>((
-      transaction,
-    ) async {
+  Future<void> _increment(String userId) async {
+    await _firestore.runTransaction<void>((transaction) async {
       final ref = _firestore.collection(usersCollection).doc(userId);
 
       final snapshot = await transaction.get(ref);
@@ -51,10 +44,7 @@ class StorageController {
           transaction.update(ref, _saveCount(1));
         }
       }
-      return IncrementResponse.success();
     });
-
-    return response;
   }
 
   Future<void> _updateGlobalCount() async {
