@@ -91,6 +91,4 @@ class StorageController {
   }
 }
 
-Map<String, dynamic> _saveCount(int count) {
-  return {countField: count};
-}
+Map<String, dynamic> _saveCount(int count) => {countField: count};

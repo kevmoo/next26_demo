@@ -53,56 +53,50 @@ class _CounterScreenState extends State<CounterScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-        actions: const [SignOutButton()],
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      title: Text(widget.title),
+      actions: const [SignOutButton()],
+    ),
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('You have pushed the button this many times:'),
+          ValueListenableBuilder<int>(
+            valueListenable: state.userCounter,
+            builder: (context, count, child) => Text(
+              '$count',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ),
+          const SizedBox(height: 32),
+          ValueListenableBuilder<GlobalData?>(
+            valueListenable: state.globalCounter,
+            builder: (context, count, child) => Text(
+              count == null
+                  ? '...'
+                  : [
+                      _Plurals.people.getFor(count.totalUsers),
+                      _Plurals.has.getFor(count.totalUsers, noCount: true),
+                      'pushed the button ',
+                      _Plurals.time.getFor(count.totalClicks),
+                    ].join(' '),
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ),
+          const SizedBox(height: 32),
+          FloatingActionButton.extended(
+            onPressed: state.increment,
+            tooltip: 'Increment',
+            icon: const Icon(Icons.add),
+            label: const Text('Increment'),
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            ValueListenableBuilder<int>(
-              valueListenable: state.userCounter,
-              builder: (context, count, child) {
-                return Text(
-                  '$count',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                );
-              },
-            ),
-            const SizedBox(height: 32),
-            ValueListenableBuilder<GlobalData?>(
-              valueListenable: state.globalCounter,
-              builder: (context, count, child) {
-                return Text(
-                  count == null
-                      ? '...'
-                      : [
-                          _Plurals.people.getFor(count.totalUsers),
-                          _Plurals.has.getFor(count.totalUsers, noCount: true),
-                          'pushed the button ',
-                          _Plurals.time.getFor(count.totalClicks),
-                        ].join(' '),
-                  style: Theme.of(context).textTheme.headlineSmall,
-                );
-              },
-            ),
-            const SizedBox(height: 32),
-            FloatingActionButton.extended(
-              onPressed: state.increment,
-              tooltip: 'Increment',
-              icon: const Icon(Icons.add),
-              label: const Text('Increment'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }
 
 enum _Plurals {

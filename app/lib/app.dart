@@ -6,11 +6,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      routerConfig: router,
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp.router(
+    debugShowCheckedModeBanner: false,
+    title: 'Flutter Demo',
+    routerConfig: router,
+  );
 }
