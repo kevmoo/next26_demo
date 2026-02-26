@@ -77,6 +77,10 @@ class StorageController {
       rethrow;
     }
   }
+
+  Future<void> close() async {
+    await _firestore.terminate();
+  }
 }
 
 Map<String, dynamic> _saveCount(int count) {
