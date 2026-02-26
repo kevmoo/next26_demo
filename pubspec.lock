@@ -278,7 +278,7 @@ packages:
     description:
       path: "packages/dart_firebase_admin"
       ref: next
-      resolved-ref: "56425015c74cc46c6213df97e58c82843853ab83"
+      resolved-ref: c43ddd4d104b77a30e0ff45d7aec3a2859192530
       url: "https://github.com/invertase/dart_firebase_admin"
     source: git
     version: "0.5.0"
@@ -302,10 +302,10 @@ packages:
     dependency: transitive
     description:
       name: dart_style
-      sha256: "15a7db352c8fc6a4d2bc475ba901c25b39fe7157541da4c16eacce6f8be83e49"
+      sha256: "6f6b30cba0301e7b38f32bdc9a6bdae6f5921a55f0a1eb9450e1e6515645dbb2"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.5"
+    version: "3.1.6"
   decimal:
     dependency: transitive
     description:
@@ -422,9 +422,9 @@ packages:
     dependency: "direct overridden"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: b00fcc0508a6e5633c4bb730b769d51e2649d446
-      url: "https://github.com/invertase/firebase_functions.git"
+      ref: fix-doc-deleted
+      resolved-ref: "071fb941204e6dba76e7f3bc4523f4f1a8b38770"
+      url: "https://github.com/invertase/firebase_functions"
     source: git
     version: "0.1.0"
   firebase_ui_auth:
@@ -527,6 +527,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  google_cloud_firestore:
+    dependency: "direct overridden"
+    description:
+      path: "packages/google_cloud_firestore"
+      ref: next
+      resolved-ref: c43ddd4d104b77a30e0ff45d7aec3a2859192530
+      url: "https://github.com/invertase/dart_firebase_admin"
+    source: git
+    version: "0.1.0"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -559,22 +568,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.0.0"
-  googleapis_firestore:
-    dependency: "direct overridden"
-    description:
-      path: "packages/googleapis_firestore"
-      ref: next
-      resolved-ref: "56425015c74cc46c6213df97e58c82843853ab83"
-      url: "https://github.com/invertase/dart_firebase_admin.git"
-    source: git
-    version: "0.1.0"
   googleapis_storage:
     dependency: "direct overridden"
     description:
       path: "packages/googleapis_storage"
       ref: next
-      resolved-ref: "56425015c74cc46c6213df97e58c82843853ab83"
-      url: "https://github.com/invertase/dart_firebase_admin.git"
+      resolved-ref: c43ddd4d104b77a30e0ff45d7aec3a2859192530
+      url: "https://github.com/invertase/dart_firebase_admin"
     source: git
     version: "0.1.0"
   graphs:
