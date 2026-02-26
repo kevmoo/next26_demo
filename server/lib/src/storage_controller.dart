@@ -15,58 +15,10 @@ class StorageController {
 
   Future<IncrementResponse> increment(String userId) async {
     try {
-      final response = await _firestore.runTransaction<IncrementResponse>((
-        transaction,
-      ) async {
-        final ref = _firestore.collection(usersCollection).doc(userId);
-
-        final snapshot = await transaction.get(ref);
-
-        if (!snapshot.exists) {
-          // Document doesn't exist, create it with count = 1
-          transaction.set(ref, _saveCount(1));
-        } else {
-          final data = snapshot.data();
-          if (data != null && data.containsKey(countField)) {
-            // Field exists, increment it
-            transaction.update(ref, {
-              countField: const FieldValue.increment(1),
-            });
-          } else {
-            // Field doesn't exist, initialize it to 1
-            transaction.update(ref, _saveCount(1));
-          }
-        }
-        return IncrementResponse.success();
-      });
+      final response = await _increment(userId);
 
       if (response.success) {
-        final globalCountSnapshot = await _firestore
-            .collection(usersCollection)
-            .aggregate(const sum(countField), const count())
-            .get();
-
-        var globalCountRaw = globalCountSnapshot.getSum(countField);
-
-        if (globalCountRaw == null || globalCountRaw < 1) {
-          // TODO: we don't want to crash here, but we should log
-          print('Very weird value for global count: "$globalCountRaw');
-          globalCountRaw = 1;
-        }
-
-        final globalCountValue = globalCountRaw.toInt();
-        final userCountValue = globalCountSnapshot.count;
-
-        final globalVars = _firestore
-            .collection(globalCollection)
-            .doc(varsDocument);
-
-        // TODO: Investigate a more efficient way to do this
-        // Maybe with a trigger?
-        await globalVars.set({
-          totalCountField: globalCountValue,
-          totalUsersField: userCountValue,
-        });
+        await _updateGlobalCount();
       }
 
       return response;
@@ -76,6 +28,62 @@ class StorageController {
       print(stack);
       rethrow;
     }
+  }
+
+  Future<IncrementResponse> _increment(String userId) async {
+    final response = await _firestore.runTransaction<IncrementResponse>((
+      transaction,
+    ) async {
+      final ref = _firestore.collection(usersCollection).doc(userId);
+
+      final snapshot = await transaction.get(ref);
+
+      if (!snapshot.exists) {
+        // Document doesn't exist, create it with count = 1
+        transaction.set(ref, _saveCount(1));
+      } else {
+        final data = snapshot.data();
+        if (data != null && data.containsKey(countField)) {
+          // Field exists, increment it
+          transaction.update(ref, {countField: const FieldValue.increment(1)});
+        } else {
+          // Field doesn't exist, initialize it to 1
+          transaction.update(ref, _saveCount(1));
+        }
+      }
+      return IncrementResponse.success();
+    });
+
+    return response;
+  }
+
+  Future<void> _updateGlobalCount() async {
+    final globalCountSnapshot = await _firestore
+        .collection(usersCollection)
+        .aggregate(const sum(countField), const count())
+        .get();
+
+    var globalCountRaw = globalCountSnapshot.getSum(countField);
+
+    if (globalCountRaw == null || globalCountRaw < 1) {
+      // TODO: we don't want to crash here, but we should log
+      print('Very weird value for global count: "$globalCountRaw');
+      globalCountRaw = 1;
+    }
+
+    final globalCountValue = globalCountRaw.toInt();
+    final userCountValue = globalCountSnapshot.count;
+
+    final globalVars = _firestore
+        .collection(globalCollection)
+        .doc(varsDocument);
+
+    // TODO: Investigate a more efficient way to do this
+    // Maybe with a trigger?
+    await globalVars.set({
+      totalCountField: globalCountValue,
+      totalUsersField: userCountValue,
+    });
   }
 
   Future<void> close() async {
