@@ -3,15 +3,6 @@ requiredAPIs:
   - api: cloudfunctions.googleapis.com
     reason: Required for Cloud Functions
 endpoints:
-  hello-world:
-    platform: gcfv2
-    region:
-      - us-central1
-    httpsTrigger: {}
-    baseImageUri: us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/runtimes/go123
-    command:
-      - ./bin/server
-    entryPoint: hello-world
   increment:
     platform: gcfv2
     region:
@@ -21,12 +12,3 @@ endpoints:
     command:
       - ./bin/server
     entryPoint: increment
-  greet-typed:
-    platform: gcfv2
-    region:
-      - us-central1
-    callableTrigger: {}
-    baseImageUri: us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/runtimes/go123
-    command:
-      - ./bin/server
-    entryPoint: greet-typed
