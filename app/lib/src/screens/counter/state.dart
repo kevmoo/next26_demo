@@ -4,8 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:next26_shared/next26_shared.dart';
+import 'package:next26_shared/next26_shared.dart'
+    show IncrementResponse, countField, totalCountField, totalUsersField;
 import 'package:stream_transform/stream_transform.dart';
+
+import 'client_experiment.dart';
 
 typedef GlobalData = ({int totalUsers, int totalClicks});
 
@@ -13,10 +16,8 @@ class CounterState {
   CounterState() {
     _incrementController.stream
         .switchMap(
-          (_) => FirebaseFunctions.instance
-              .httpsCallable(incrementCallable)
-              .call<Object?>()
-              .asStream(),
+          (_) =>
+              FirebaseFunctions.instance.$increment.call<Object?>().asStream(),
         )
         .listen(_handleIncrementResult);
 
@@ -39,36 +40,30 @@ class CounterState {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid != null) {
       _subscriptions.add(
-        FirebaseFirestore.instance
-            .collection(usersCollection)
-            .doc(uid)
-            .snapshots()
-            .listen((snapshot) {
-              if (snapshot.exists) {
-                final data = snapshot.data();
-                if (data != null && data.containsKey(countField)) {
-                  userCounter.value = data[countField] as int;
-                }
-              }
-            }),
+        FirebaseFirestore.instance.$users.$user(uid).snapshots().listen((
+          snapshot,
+        ) {
+          if (snapshot.exists) {
+            final data = snapshot.data();
+            if (data != null && data.containsKey(countField)) {
+              userCounter.value = data[countField] as int;
+            }
+          }
+        }),
       );
 
       _subscriptions.add(
-        FirebaseFirestore.instance
-            .collection(globalCollection)
-            .doc(varsDocument)
-            .snapshots()
-            .listen((snapshot) {
-              if (snapshot.data() case {
-                totalCountField: int totalClicks,
-                totalUsersField: int totalUsers,
-              }) {
-                globalCounter.value = (
-                  totalUsers: totalUsers,
-                  totalClicks: totalClicks,
-                );
-              }
-            }),
+        FirebaseFirestore.instance.$global.$vars.snapshots().listen((snapshot) {
+          if (snapshot.data() case {
+            totalCountField: int totalClicks,
+            totalUsersField: int totalUsers,
+          }) {
+            globalCounter.value = (
+              totalUsers: totalUsers,
+              totalClicks: totalClicks,
+            );
+          }
+        }),
       );
     } else {
       print('no uid');

@@ -6,7 +6,7 @@ void main(List<String> args) async {
   final storageController = await createStorageController();
 
   await fireUp(args, (firebase) {
-    firebase.https.onCall(name: incrementCallable, (request, response) async {
+    firebase.https.onCall(name: $incrementCallable, (request, response) async {
       final userId =
           request.auth?.uid ??
           (throw UnauthenticatedError('User is not signed-in!'));

@@ -1,6 +1,12 @@
 import 'package:dart_firebase_admin/dart_firebase_admin.dart';
+import 'package:firebase_functions/firebase_functions.dart';
+import 'package:firebase_functions/logger.dart';
 import 'package:google_cloud_firestore/google_cloud_firestore.dart';
+import 'package:next26_shared/next26_shared.dart'
+    show countField, totalCountField, totalUsersField;
 import 'package:next26_shared/next26_shared.dart';
+
+import 'server_experiment.dart';
 
 Future<StorageController> createStorageController() async {
   final app = FirebaseApp.initializeApp();
@@ -17,17 +23,15 @@ class StorageController {
     try {
       await _increment(userId);
       await _updateGlobalCount();
-    } catch (e, stack) {
-      print('Error incrementing counter for user: $userId');
-      print(e);
-      print(stack);
+    } catch (e) {
+      logger.error('Error incrementing counter for user: $userId');
       rethrow;
     }
   }
 
   Future<void> _increment(String userId) async {
     await _firestore.runTransaction<void>((transaction) async {
-      final ref = _firestore.collection(usersCollection).doc(userId);
+      final ref = _firestore.$users.$user(userId);
 
       final snapshot = await transaction.get(ref);
 
@@ -48,8 +52,7 @@ class StorageController {
   }
 
   Future<void> _updateGlobalCount() async {
-    final globalCountSnapshot = await _firestore
-        .collection(usersCollection)
+    final globalCountSnapshot = await _firestore.$users
         .aggregate(const sum(countField), const count())
         .get();
 
@@ -64,9 +67,7 @@ class StorageController {
     final globalCountValue = globalCountRaw.toInt();
     final userCountValue = globalCountSnapshot.count;
 
-    final globalVars = _firestore
-        .collection(globalCollection)
-        .doc(varsDocument);
+    final globalVars = _firestore.$global.$vars;
 
     // TODO: Investigate a more efficient way to do this
     // Maybe with a trigger?
