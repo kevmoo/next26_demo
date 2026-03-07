@@ -25,15 +25,9 @@ dependency_overrides:
   firebase_functions:
     git:
       url: https://github.com/invertase/firebase_functions
-      ref: fix-doc-deleted
 
   google_cloud_firestore:
     git:
       url: https://github.com/invertase/dart_firebase_admin
       ref: next
       path: packages/google_cloud_firestore
-  googleapis_storage:
-    git:
-      url: https://github.com/invertase/dart_firebase_admin
-      ref: next
-      path: packages/googleapis_storage

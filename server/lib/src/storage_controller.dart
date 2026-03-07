@@ -1,5 +1,5 @@
 import 'package:dart_firebase_admin/dart_firebase_admin.dart';
-import 'package:googleapis_firestore/googleapis_firestore.dart';
+import 'package:google_cloud_firestore/google_cloud_firestore.dart';
 import 'package:next26_shared/next26_shared.dart';
 
 Future<StorageController> createStorageController() async {
