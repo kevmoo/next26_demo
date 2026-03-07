@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:next26_shared/next26_shared.dart';
+import 'package:multi_counter_shared/multi_counter_shared.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 typedef GlobalData = ({int totalUsers, int totalClicks});

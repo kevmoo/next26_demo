@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:next26_shared/next26_shared.dart';
+import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 import 'state.dart';
 

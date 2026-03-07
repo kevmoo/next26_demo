@@ -1,4 +1,4 @@
-name: next26_demo_workspace
+name: _multi_counter_workspace
 
 environment:
   sdk: ^3.10.0

@@ -1,5 +1,5 @@
 .dart_tool
 #pubspec.lock
-app/firebase.json
-app/lib/firebase_options.dart
+multi_counter/app/firebase.json
+multi_counter/app/lib/firebase_options.dart
 .vscode

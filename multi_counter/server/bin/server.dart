@@ -1,6 +1,6 @@
 import 'package:firebase_functions/firebase_functions.dart';
-import 'package:next26_server/src/storage_controller.dart';
-import 'package:next26_shared/next26_shared.dart';
+import 'package:multi_counter_server/src/storage_controller.dart';
+import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 void main(List<String> args) async {
   final storageController = await createStorageController();

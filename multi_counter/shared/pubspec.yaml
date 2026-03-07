@@ -1,4 +1,4 @@
-name: next26_shared
+name: multi_counter_shared
 publish_to: none
 resolution: workspace
 

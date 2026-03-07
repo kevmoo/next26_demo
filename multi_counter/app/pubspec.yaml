@@ -1,4 +1,4 @@
-name: app
+name: multi_counter_app
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -16,7 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   go_router: ^17.0.1
-  next26_shared: any
+  multi_counter_shared: any
   stream_transform: ^2.1.1
 
 dev_dependencies:
