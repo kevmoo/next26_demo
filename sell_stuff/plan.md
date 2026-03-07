@@ -35,3 +35,8 @@ A minimal grid layout displaying all items currently for sale.
 3. **Backend Setup:** Implement the server logic and data persistence layer.
 4. **App UI:** Build the Sell Page form and Listing Page grid.
 5. **Integration:** Connect the app to the server to finalize the end-to-end flow.
+
+A key feature of this app is using functions support to mitigate create/edit of the entries
+to make sure the data is valid beyond what you can do with normal Firebase rules.
+
+If you want help runnig the server and/or client to validate things I can provide instructions when we get that far.
