@@ -24,10 +24,9 @@ void main(List<String> args) async {
         throw InvalidArgumentError('Price must be greater than zero');
       }
 
-      final listing = Listing.fromJson(data);
-      if (listing.sellerId != userId) {
-        throw PermissionDeniedError('Cannot create a listing for another user');
-      }
+      final validData = Map<String, dynamic>.from(data);
+      validData['sellerId'] = userId;
+      final listing = Listing.fromJson(validData);
 
       final newListing = await storageController.createListing(listing);
       return CallableResult(newListing.toJson());
@@ -48,10 +47,9 @@ void main(List<String> args) async {
         throw InvalidArgumentError('Price must be greater than zero');
       }
 
-      final listing = Listing.fromJson(data);
-      if (listing.sellerId != userId) {
-        throw PermissionDeniedError('Cannot edit a listing for another user');
-      }
+      final validData = Map<String, dynamic>.from(data);
+      validData['sellerId'] = userId;
+      final listing = Listing.fromJson(validData);
 
       try {
         final updatedListing = await storageController.editListing(listing);

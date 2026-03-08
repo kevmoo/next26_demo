@@ -1,4 +1,4 @@
-const createListingCallable = 'createListing';
-const editListingCallable = 'editListing';
+const createListingCallable = 'create-listing';
+const editListingCallable = 'edit-listing';
 
 const listingsCollection = 'listings';
