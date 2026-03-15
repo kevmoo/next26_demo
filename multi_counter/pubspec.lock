@@ -278,7 +278,7 @@ packages:
     description:
       path: "packages/dart_firebase_admin"
       ref: next
-      resolved-ref: "8f91d521250d828df1e996a268b2c40b86eb4b2b"
+      resolved-ref: "0237e18fd2215aeb6b45864c7e6d7e9939f728b8"
       url: "https://github.com/invertase/dart_firebase_admin"
     source: git
     version: "0.5.0"
@@ -415,7 +415,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "956b379d30ad1db2c8f9a7be693635df37384ff3"
+      resolved-ref: "265ef5eb3e318844c397b5cd2d4b205579d36e0d"
       url: "https://github.com/invertase/firebase_functions"
     source: git
     version: "0.1.0"
@@ -516,7 +516,7 @@ packages:
     description:
       path: "packages/google_cloud_firestore"
       ref: next
-      resolved-ref: "8f91d521250d828df1e996a268b2c40b86eb4b2b"
+      resolved-ref: "0237e18fd2215aeb6b45864c7e6d7e9939f728b8"
       url: "https://github.com/invertase/dart_firebase_admin"
     source: git
     version: "0.1.0"
@@ -865,10 +865,10 @@ packages:
     dependency: transitive
     description:
       name: source_gen
-      sha256: "1d562a3c1f713904ebbed50d2760217fd8a51ca170ac4b05b0db490699dbac17"
+      sha256: adc962c96fffb2de1728ef396a995aaedcafbe635abdca13d2a987ce17e57751
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.0"
+    version: "4.2.1"
   source_helper:
     dependency: transitive
     description:
@@ -945,10 +945,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics
-      sha256: a4f059dc26fc8295b5921376600a194c4ec7d55e72f2fe4c7d2831e103d461e6
+      sha256: "7076216a10d5c390315fbe536a30f1254c341e7543e6c4c8a815e591307772b1"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.19"
+    version: "1.1.20"
   vector_graphics_codec:
     dependency: transitive
     description:
