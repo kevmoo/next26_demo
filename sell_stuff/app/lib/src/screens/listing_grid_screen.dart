@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sell_stuff_shared/shared.dart';
@@ -9,18 +9,9 @@ class ListingGridScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text('Sell Stuff'),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () => context.push('/sell'),
-        ),
-        IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: () => FirebaseAuth.instance.signOut(),
-        ),
-      ],
+    floatingActionButton: FloatingActionButton(
+      onPressed: () => context.push('/sell'),
+      child: const Icon(Icons.add),
     ),
     body: StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
