@@ -85,120 +85,119 @@ class _SellPageScreenState extends State<SellPageScreen> {
         ? const Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Title'),
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Required' : null,
-                    onSaved: (value) => _title = value ?? '',
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Description'),
-                    onSaved: (value) => _description = value ?? '',
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Price'),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Required' : null,
-                    onSaved: (value) => _priceString = value ?? '',
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: 'Category'),
-                    onSaved: (value) => _category = value ?? '',
-                  ),
-                  const SizedBox(height: 20),
-                  DropTarget(
-                    onDragDone: (detail) async {
-                      if (detail.files.isNotEmpty) {
-                        setState(() {
-                          _selectedImage = detail.files.first;
-                        });
-                      }
-                    },
-                    onDragEntered: (detail) =>
-                        setState(() => _isDragging = true),
-                    onDragExited: (detail) =>
-                        setState(() => _isDragging = false),
-                    child: Container(
-                      height: 200,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: _isDragging ? Colors.blue : Colors.grey,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        color: _isDragging ? Colors.blue.withAlpha(25) : null,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'Title'),
+                        validator: (value) =>
+                            value == null || value.isEmpty ? 'Required' : null,
+                        onSaved: (value) => _title = value ?? '',
                       ),
-                      child: _selectedImage != null
-                          ? (kIsWeb
-                                ? Image.network(
-                                    _selectedImage!.path,
-                                    fit: BoxFit.cover,
-                                  )
-                                : FutureBuilder<Uint8List>(
-                                    future: _selectedImage!.readAsBytes(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return Image.memory(
-                                          snapshot.data!,
-                                          fit: BoxFit.cover,
-                                        );
-                                      }
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    },
-                                  ))
-                          : Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.cloud_upload,
-                                    size: 50,
-                                    color: Colors.grey,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Drag & drop an image here,\n'
-                                    'or click to browse',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () async {
-                                      final picker = ImagePicker();
-                                      final picked = await picker.pickImage(
-                                        source: ImageSource.gallery,
-                                      );
-                                      if (picked != null) {
-                                        setState(() => _selectedImage = picked);
-                                      }
-                                    },
-                                    child: const Text('Browse Files'),
-                                  ),
-                                ],
-                              ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                        ),
+                        onSaved: (value) => _description = value ?? '',
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'Price'),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        validator: (value) =>
+                            value == null || value.isEmpty ? 'Required' : null,
+                        onSaved: (value) => _priceString = value ?? '',
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Category',
+                        ),
+                        onSaved: (value) => _category = value ?? '',
+                      ),
+                      const SizedBox(height: 20),
+                      DropTarget(
+                        onDragDone: (detail) async {
+                          if (detail.files.isNotEmpty) {
+                            setState(() {
+                              _selectedImage = detail.files.first;
+                            });
+                          }
+                        },
+                        onDragEntered: (detail) =>
+                            setState(() => _isDragging = true),
+                        onDragExited: (detail) =>
+                            setState(() => _isDragging = false),
+                        child: Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: _isDragging ? Colors.blue : Colors.grey,
+                              width: 2,
                             ),
-                    ),
+                            borderRadius: BorderRadius.circular(12),
+                            color: _isDragging
+                                ? Colors.blue.withAlpha(25)
+                                : null,
+                          ),
+                          child: _selectedImage != null
+                              ? _buildImagePreview()
+                              : _buildImagePickerPlaceholder(),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _submitForm,
+                        child: const Text('Submit Listing'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    child: const Text('Submit Listing'),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
+  );
+
+  Widget _buildImagePreview() => kIsWeb
+      ? Image.network(_selectedImage!.path, fit: BoxFit.contain)
+      : FutureBuilder<Uint8List>(
+          future: _selectedImage!.readAsBytes(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Image.memory(snapshot.data!, fit: BoxFit.contain);
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        );
+
+  Widget _buildImagePickerPlaceholder() => Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.cloud_upload, size: 50, color: Colors.grey),
+        const SizedBox(height: 8),
+        Text(
+          'Drag & drop an image here,\n'
+          'or click to browse',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.grey.shade600),
+        ),
+        TextButton(
+          onPressed: () async {
+            final picker = ImagePicker();
+            final picked = await picker.pickImage(source: ImageSource.gallery);
+            if (picked != null) {
+              setState(() => _selectedImage = picked);
+            }
+          },
+          child: const Text('Browse Files'),
+        ),
+      ],
+    ),
   );
 }

@@ -42,8 +42,8 @@ class ListingGridScreen extends StatelessWidget {
 
         return GridView.builder(
           padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 300,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
             childAspectRatio: 0.75,
@@ -61,7 +61,7 @@ class ListingGridScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: listing.imageUrl.isNotEmpty
-                          ? Image.network(listing.imageUrl, fit: BoxFit.cover)
+                          ? Image.network(listing.imageUrl, fit: BoxFit.contain)
                           : const Icon(Icons.image, size: 50),
                     ),
                     Padding(
