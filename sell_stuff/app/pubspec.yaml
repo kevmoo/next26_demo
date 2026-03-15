@@ -10,12 +10,16 @@ environment:
 dependencies:
   cloud_firestore: ^6.1.2
   cloud_functions: ^6.0.0
+  cross_file: ^0.3.5+2
+  desktop_drop: ^0.7.0
   firebase_auth: ^6.1.4
   firebase_core: ^4.4.0
+  firebase_storage: ^13.1.0
   firebase_ui_auth: ^3.0.1
   flutter:
     sdk: flutter
   go_router: ^17.0.1
+  image_picker: ^1.2.1
   sell_stuff_shared: any
   stream_transform: ^2.1.1
 
