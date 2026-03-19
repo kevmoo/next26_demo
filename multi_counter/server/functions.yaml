@@ -7,7 +7,7 @@ endpoints:
     platform: gcfv2
     region:
       - us-central1
-    callableTrigger: {}
+    httpsTrigger: {}
     baseImageUri: us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/runtimes/go123
     command:
       - ./bin/server

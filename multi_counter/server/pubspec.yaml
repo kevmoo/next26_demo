@@ -7,6 +7,7 @@ environment:
 
 dependencies:
   dart_firebase_admin:
+  dart_jsonwebtoken: ^3.1.1
   firebase_functions: any
   google_cloud_firestore:
   multi_counter_shared: any # workspace

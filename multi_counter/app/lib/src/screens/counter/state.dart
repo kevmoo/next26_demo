@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -12,12 +13,7 @@ typedef GlobalData = ({int totalUsers, int totalClicks});
 class CounterState {
   CounterState() {
     _incrementController.stream
-        .switchMap(
-          (_) => FirebaseFunctions.instance
-              .httpsCallable(incrementCallable)
-              .call<Object?>()
-              .asStream(),
-        )
+        .switchMap((_) => _callIncrement().asStream())
         .listen(_handleIncrementResult);
 
     _initFirestore();
@@ -81,11 +77,42 @@ class CounterState {
     _incrementController.add(null);
   }
 
-  void _handleIncrementResult(HttpsCallableResult<Object?> result) {
-    if (result.data case String data) {
-      print('Incremented: $data');
+  Future<http.Response?> _callIncrement() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+
+    final idToken = await user.getIdToken();
+    if (idToken == null) return null;
+
+    final options = Firebase.app().options;
+    final projectId = options.projectId;
+
+    late Uri uri;
+    if (kDebugMode) {
+      // In debug mode, we point to the emulator running locally.
+      uri = Uri.parse(
+        'http://localhost:5001/$projectId/us-central1/$incrementCallable',
+      );
     } else {
-      print('Unexpected data format: ${result.data}');
+      // In production, we point to the deployed Cloud Function.
+      uri = Uri.parse(
+        'https://us-central1-$projectId.cloudfunctions.net/$incrementCallable',
+      );
+    }
+
+    return http.post(uri, headers: {'Authorization': 'Bearer $idToken'});
+  }
+
+  void _handleIncrementResult(http.Response? response) {
+    if (response == null) {
+      print('Request failed: user is not authenticated.');
+      return;
+    }
+
+    if (response.statusCode == 200) {
+      print('Incremented: ${response.body}');
+    } else {
+      print('Unexpected error: \${response.statusCode} \${response.body}');
     }
   }
 
