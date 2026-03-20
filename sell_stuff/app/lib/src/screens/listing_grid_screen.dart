@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sell_stuff_shared/shared.dart';
 
+import '../widgets/constrained_content.dart';
+
 class ListingGridScreen extends StatelessWidget {
   const ListingGridScreen({super.key});
 
@@ -31,20 +33,23 @@ class ListingGridScreen extends StatelessWidget {
           return const Center(child: Text('No items for sale yet.'));
         }
 
-        return GridView.builder(
-          padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 300,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.75,
+        return ConstrainedContent(
+          width: ContentWidth.wide,
+          child: GridView.builder(
+            padding: const EdgeInsets.all(16),
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 300,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.75,
+            ),
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              final data = docs[index].data() as Map<String, dynamic>;
+              final listing = Listing.fromJson(data);
+              return _ListingCard(listing: listing);
+            },
           ),
-          itemCount: docs.length,
-          itemBuilder: (context, index) {
-            final data = docs[index].data() as Map<String, dynamic>;
-            final listing = Listing.fromJson(data);
-            return _ListingCard(listing: listing);
-          },
         );
       },
     ),

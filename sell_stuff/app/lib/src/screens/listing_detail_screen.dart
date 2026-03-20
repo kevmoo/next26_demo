@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sell_stuff_shared/shared.dart';
 
+import '../widgets/constrained_content.dart';
+
 class ListingDetailScreen extends StatelessWidget {
   final String id;
 
@@ -32,32 +34,41 @@ class ListingDetailScreen extends StatelessWidget {
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (listing.imageUrl.isNotEmpty)
-                Center(child: Image.network(listing.imageUrl, height: 200)),
-              const SizedBox(height: 16),
-              Text(
-                listing.title,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '\$${listing.price.toStringAsFixed(2)}',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(color: Colors.green),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                listing.description,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 16),
-              if (listing.category.isNotEmpty)
-                Chip(label: Text(listing.category)),
-            ],
+          child: ConstrainedContent(
+            width: ContentWidth.narrow,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (listing.imageUrl.isNotEmpty)
+                  AspectRatio(
+                    aspectRatio: 4 / 3,
+                    child: Image.network(listing.imageUrl, fit: BoxFit.contain),
+                  ),
+                const SizedBox(height: 16),
+                Text(
+                  listing.title,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '\$${listing.price.toStringAsFixed(2)}',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: Colors.green),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  listing.description,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(height: 16),
+                if (listing.category.isNotEmpty)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Chip(label: Text(listing.category)),
+                  ),
+              ],
+            ),
           ),
         );
       },

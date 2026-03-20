@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../widgets/constrained_content.dart';
 import 'sell_page_state.dart';
 
 class SellPageScreen extends StatefulWidget {
@@ -47,78 +48,72 @@ class _SellPageScreenState extends State<SellPageScreen> {
         ? const Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Title'),
-                        validator: (value) =>
-                            value == null || value.isEmpty ? 'Required' : null,
-                        onSaved: (value) => _state.title = value ?? '',
+            child: ConstrainedContent(
+              width: ContentWidth.narrow,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Title'),
+                      validator: (value) =>
+                          value == null || value.isEmpty ? 'Required' : null,
+                      onSaved: (value) => _state.title = value ?? '',
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Description',
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Description',
-                        ),
-                        onSaved: (value) => _state.description = value ?? '',
+                      onSaved: (value) => _state.description = value ?? '',
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Price'),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Price'),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        validator: (value) =>
-                            value == null || value.isEmpty ? 'Required' : null,
-                        onSaved: (value) => _state.priceString = value ?? '',
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Category',
-                        ),
-                        onSaved: (value) => _state.category = value ?? '',
-                      ),
-                      const SizedBox(height: 20),
-                      DropTarget(
-                        onDragDone: (detail) async {
-                          if (detail.files.isNotEmpty) {
-                            setState(() {
-                              _state.selectedImage = detail.files.first;
-                            });
-                          }
-                        },
-                        onDragEntered: (detail) =>
-                            setState(() => _isDragging = true),
-                        onDragExited: (detail) =>
-                            setState(() => _isDragging = false),
-                        child: Container(
-                          height: 200,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: _isDragging ? Colors.blue : Colors.grey,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                            color: _isDragging
-                                ? Colors.blue.withAlpha(25)
-                                : null,
+                      validator: (value) =>
+                          value == null || value.isEmpty ? 'Required' : null,
+                      onSaved: (value) => _state.priceString = value ?? '',
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(labelText: 'Category'),
+                      onSaved: (value) => _state.category = value ?? '',
+                    ),
+                    const SizedBox(height: 20),
+                    DropTarget(
+                      onDragDone: (detail) async {
+                        if (detail.files.isNotEmpty) {
+                          setState(() {
+                            _state.selectedImage = detail.files.first;
+                          });
+                        }
+                      },
+                      onDragEntered: (detail) =>
+                          setState(() => _isDragging = true),
+                      onDragExited: (detail) =>
+                          setState(() => _isDragging = false),
+                      child: Container(
+                        height: 200,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: _isDragging ? Colors.blue : Colors.grey,
+                            width: 2,
                           ),
-                          child: _state.selectedImage != null
-                              ? _buildImagePreview()
-                              : _buildImagePickerPlaceholder(),
+                          borderRadius: BorderRadius.circular(12),
+                          color: _isDragging ? Colors.blue.withAlpha(25) : null,
                         ),
+                        child: _state.selectedImage != null
+                            ? _buildImagePreview()
+                            : _buildImagePickerPlaceholder(),
                       ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _submitForm,
-                        child: const Text('Submit Listing'),
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: const Text('Submit Listing'),
+                    ),
+                  ],
                 ),
               ),
             ),
