@@ -45,42 +45,6 @@ void main(List<String> args) async {
       );
     });
 
-    firebase.https.onRequest(name: editListingCallable, (request) async {
-      if (request.method != 'PUT') {
-        throw FailedPreconditionError('Method Not Allowed');
-      }
-
-      final userId = _authIdFromRequest(request);
-      if (userId == null) {
-        throw UnauthenticatedError('User is not signed-in!');
-      }
-
-      final bodyStr = await request.readAsString();
-      final data = jsonDecode(bodyStr) as Map<String, dynamic>;
-
-      if (data['title'] == null || (data['title'] as String).isEmpty) {
-        throw InvalidArgumentError('Title cannot be empty');
-      }
-      if (data['price'] == null || (data['price'] as num) <= 0) {
-        throw InvalidArgumentError('Price must be greater than zero');
-      }
-
-      final validData = Map<String, dynamic>.from(data);
-      validData['sellerId'] = userId;
-      validData['id'] = data['id'] ?? '';
-      validData['imageUrl'] = data['imageUrl'] ?? '';
-
-      await _processImageUpload(validData, storageController);
-
-      final listing = Listing.fromJson(validData);
-
-      final updatedListing = await storageController.editListing(listing);
-      return Response.ok(
-        jsonEncode(updatedListing.toJson()),
-        headers: {'content-type': 'application/json'},
-      );
-    });
-
     print('Functions registered successfully!');
   });
 }
