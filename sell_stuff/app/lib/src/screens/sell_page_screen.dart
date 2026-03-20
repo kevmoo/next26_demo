@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -43,18 +42,14 @@ class _SellPageScreenState extends State<SellPageScreen> {
     setState(() => _isLoading = true);
 
     try {
-      var imageUrl = '';
+      var imageBase64 = '';
+      var imageMimeType = '';
+      var imageName = '';
       if (_selectedImage != null) {
-        final timestamp = DateTime.now().millisecondsSinceEpoch;
-        final ref = FirebaseStorage.instance.ref().child(
-          'listings/${timestamp}_${_selectedImage!.name}',
-        );
         final bytes = await _selectedImage!.readAsBytes();
-        await ref.putData(
-          bytes,
-          SettableMetadata(contentType: _selectedImage!.mimeType),
-        );
-        imageUrl = await ref.getDownloadURL();
+        imageBase64 = base64Encode(bytes);
+        imageMimeType = _selectedImage!.mimeType ?? 'image/jpeg';
+        imageName = _selectedImage!.name;
       }
 
       final user = FirebaseAuth.instance.currentUser;
@@ -92,7 +87,10 @@ class _SellPageScreenState extends State<SellPageScreen> {
           'description': _description,
           'price': price,
           'category': _category,
-          'imageUrl': imageUrl,
+          'imageUrl': '', // Handled by server backend if empty
+          'imageBase64': imageBase64,
+          'imageMimeType': imageMimeType,
+          'imageName': imageName,
           'sellerId': '', // Handled by server backend
         }),
       );

@@ -31,6 +31,9 @@ void main(List<String> args) async {
 
       final validData = Map<String, dynamic>.from(data);
       validData['sellerId'] = userId;
+
+      await _processImageUpload(validData, storageController);
+
       final listing = Listing.fromJson(validData);
 
       final newListing = await storageController.createListing(listing);
@@ -62,6 +65,9 @@ void main(List<String> args) async {
 
       final validData = Map<String, dynamic>.from(data);
       validData['sellerId'] = userId;
+
+      await _processImageUpload(validData, storageController);
+
       final listing = Listing.fromJson(validData);
 
       final updatedListing = await storageController.editListing(listing);
@@ -92,4 +98,29 @@ String? _authIdFromRequest(Request request) {
     {'user_id': final String id} => id,
     _ => null,
   };
+}
+
+Future<void> _processImageUpload(
+  Map<String, dynamic> validData,
+  StorageController storageController,
+) async {
+  if (validData['imageBase64'] != null &&
+      (validData['imageBase64'] as String).isNotEmpty) {
+    final base64String = validData['imageBase64'] as String;
+    final mimeType = validData['imageMimeType'] as String? ?? 'image/jpeg';
+    final originalName = validData['imageName'] as String? ?? 'image.jpg';
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final name = '${timestamp}_$originalName';
+
+    final url = await storageController.uploadImage(
+      base64String,
+      mimeType,
+      name,
+    );
+    validData['imageUrl'] = url;
+
+    validData.remove('imageBase64');
+    validData.remove('imageMimeType');
+    validData.remove('imageName');
+  }
 }

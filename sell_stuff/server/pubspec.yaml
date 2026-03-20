@@ -10,6 +10,7 @@ dependencies:
   dart_jsonwebtoken: ^3.1.1
   firebase_functions: any
   google_cloud_firestore:
+  google_cloud_storage: ^0.5.1
   sell_stuff_shared: any # workspace
 
 dev_dependencies:

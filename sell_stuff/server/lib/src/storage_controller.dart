@@ -1,17 +1,34 @@
+import 'dart:convert';
 import 'package:dart_firebase_admin/dart_firebase_admin.dart';
 import 'package:google_cloud_firestore/google_cloud_firestore.dart';
+import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:sell_stuff_shared/shared.dart';
 
 Future<StorageController> createStorageController() async {
   final app = FirebaseApp.initializeApp();
 
-  return StorageController._(app.firestore());
+  return StorageController._(app.firestore(), app);
 }
 
 class StorageController {
   final Firestore _firestore;
+  final FirebaseApp _app;
 
-  StorageController._(this._firestore);
+  StorageController._(this._firestore, this._app);
+
+  Future<String> uploadImage(
+    String base64Data,
+    String mimeType,
+    String fileName,
+  ) async {
+    final bytes = base64Decode(base64Data);
+    final bucket = _app.storage().bucket();
+    final object = bucket.object('listings/$fileName');
+    final metadata = ObjectMetadata(contentType: mimeType);
+
+    await object.upload(bytes, metadata: metadata);
+    return await _app.storage().getDownloadURL(bucket, 'listings/$fileName');
+  }
 
   Future<Listing> createListing(Listing listing) async {
     final docRef = _firestore.collection(listingsCollection).doc();
