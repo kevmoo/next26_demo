@@ -19,17 +19,19 @@ final router = GoRouter(
         GoRoute(
           path: '/',
           builder: (context, state) => const ListingGridScreen(),
-        ),
-        GoRoute(
-          path: '/sell',
-          builder: (context, state) => const SellPageScreen(),
-        ),
-        GoRoute(
-          path: '/listing/:id',
-          builder: (context, state) {
-            final id = state.pathParameters['id']!;
-            return ListingDetailScreen(id: id);
-          },
+          routes: [
+            GoRoute(
+              path: 'sell',
+              builder: (context, state) => const SellPageScreen(),
+            ),
+            GoRoute(
+              path: 'listing/:id',
+              builder: (context, state) {
+                final id = state.pathParameters['id']!;
+                return ListingDetailScreen(id: id);
+              },
+            ),
+          ],
         ),
       ],
     ),

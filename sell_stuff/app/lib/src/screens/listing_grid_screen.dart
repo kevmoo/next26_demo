@@ -12,7 +12,7 @@ class ListingGridScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     floatingActionButton: FloatingActionButton(
-      onPressed: () => context.push('/sell'),
+      onPressed: () => context.go('/sell'),
       child: const Icon(Icons.add),
     ),
     body: StreamBuilder<QuerySnapshot>(
@@ -74,7 +74,7 @@ class _ListingCardState extends State<_ListingCard> {
     onEnter: (_) => setState(() => _isHovering = true),
     onExit: (_) => setState(() => _isHovering = false),
     child: GestureDetector(
-      onTap: () => context.push('/listing/${widget.listing.id}'),
+      onTap: () => context.go('/listing/${widget.listing.id}'),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         transform: Matrix4.translationValues(0, _isHovering ? -4 : 0, 0),
