@@ -25,3 +25,25 @@ Map<String, dynamic> _$ListingToJson(Listing instance) => <String, dynamic>{
   'imageUrl': instance.imageUrl,
   'sellerId': instance.sellerId,
 };
+
+CreateListingRequest _$CreateListingRequestFromJson(
+  Map<String, dynamic> json,
+) => CreateListingRequest(
+  title: json['title'] as String,
+  description: json['description'] as String,
+  price: (json['price'] as num).toDouble(),
+  category: json['category'] as String,
+  imageBase64: json['imageBase64'] as String,
+  imageMimeType: json['imageMimeType'] as String,
+);
+
+Map<String, dynamic> _$CreateListingRequestToJson(
+  CreateListingRequest instance,
+) => <String, dynamic>{
+  'title': instance.title,
+  'description': instance.description,
+  'price': instance.price,
+  'category': instance.category,
+  'imageBase64': instance.imageBase64,
+  'imageMimeType': instance.imageMimeType,
+};

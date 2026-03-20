@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:dart_firebase_admin/dart_firebase_admin.dart';
 import 'package:google_cloud_firestore/google_cloud_firestore.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -13,21 +14,28 @@ Future<StorageController> createStorageController() async {
 class StorageController {
   final Firestore _firestore;
   final FirebaseApp _app;
+  final _random = Random.secure();
 
   StorageController._(this._firestore, this._app);
 
   Future<String> uploadImage(
     String base64Data,
     String mimeType,
-    String fileName,
+    String userId,
   ) async {
+    final randomHex = _generateRandomHex();
+    final filePath =
+        'listings/${DateTime.now().millisecondsSinceEpoch}_$randomHex.jpg';
     final bytes = base64Decode(base64Data);
     final bucket = _app.storage().bucket();
-    final object = bucket.object('listings/$fileName');
-    final metadata = ObjectMetadata(contentType: mimeType);
+    final object = bucket.object(filePath);
+    final metadata = ObjectMetadata(
+      contentType: mimeType,
+      metadata: {'userId': userId},
+    );
 
     await object.upload(bytes, metadata: metadata);
-    return await _app.storage().getDownloadURL(bucket, 'listings/$fileName');
+    return await _app.storage().getDownloadURL(bucket, filePath);
   }
 
   Future<Listing> createListing(Listing listing) async {
@@ -61,6 +69,11 @@ class StorageController {
     await docRef.update(listing.toJson());
     return listing;
   }
+
+  String _generateRandomHex() => Iterable.generate(
+    8,
+    (_) => _random.nextInt(256).toRadixString(16).padLeft(2, '0'),
+  ).join();
 
   Future<void> close() async {
     await _firestore.terminate();

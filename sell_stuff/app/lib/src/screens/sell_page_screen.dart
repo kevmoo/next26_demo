@@ -44,12 +44,10 @@ class _SellPageScreenState extends State<SellPageScreen> {
     try {
       var imageBase64 = '';
       var imageMimeType = '';
-      var imageName = '';
       if (_selectedImage != null) {
         final bytes = await _selectedImage!.readAsBytes();
         imageBase64 = base64Encode(bytes);
         imageMimeType = _selectedImage!.mimeType ?? 'image/jpeg';
-        imageName = _selectedImage!.name;
       }
 
       final user = FirebaseAuth.instance.currentUser;
@@ -75,24 +73,22 @@ class _SellPageScreenState extends State<SellPageScreen> {
         );
       }
 
+      final createRequest = CreateListingRequest(
+        title: _title,
+        description: _description,
+        price: price,
+        category: _category,
+        imageBase64: imageBase64,
+        imageMimeType: imageMimeType,
+      );
+
       final response = await http.post(
         uri,
         headers: {
           'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({
-          'id': '',
-          'title': _title,
-          'description': _description,
-          'price': price,
-          'category': _category,
-          'imageUrl': '', // Handled by server backend if empty
-          'imageBase64': imageBase64,
-          'imageMimeType': imageMimeType,
-          'imageName': imageName,
-          'sellerId': '', // Handled by server backend
-        }),
+        body: jsonEncode(createRequest.toJson()),
       );
 
       if (response.statusCode != 200) {
