@@ -57,6 +57,33 @@ void main(List<String> args) async {
       );
     });
 
+    firebase.https.onRequest(name: suggestionDetailsCallable, (request) async {
+      if (request.method != 'POST') {
+        throw FailedPreconditionError('Method Not Allowed');
+      }
+
+      final userId = _authIdFromRequest(request);
+      if (userId == null) {
+        throw UnauthenticatedError('User is not signed-in!');
+      }
+
+      // We don't parse the body yet for the actual tool call,
+      // just return mock data
+      final mockData = {
+        'title': 'Awesome Magic Widget',
+        'description':
+            'A very magic widget automatically '
+            'determined by AI.',
+        'price': '42.0',
+        'category': 'Electronics',
+      };
+
+      return Response.ok(
+        jsonEncode(mockData),
+        headers: {'content-type': 'application/json'},
+      );
+    });
+
     print('Functions registered successfully!');
   });
 }

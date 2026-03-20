@@ -17,8 +17,65 @@ class NewListingScreen extends StatefulWidget {
 class _NewListingScreenState extends State<NewListingScreen> {
   final _formKey = GlobalKey<FormState>();
   final _state = NewItemState();
+  final _titleController = TextEditingController();
+  final _descController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _categoryController = TextEditingController();
   bool _isLoading = false;
   bool _isDragging = false;
+  bool _isAutoFilling = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.addListener(_updateState);
+    _descController.addListener(_updateState);
+    _priceController.addListener(_updateState);
+    _categoryController.addListener(_updateState);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    _priceController.dispose();
+    _categoryController.dispose();
+    super.dispose();
+  }
+
+  void _updateState() {
+    setState(() {});
+  }
+
+  bool get _canAutoFill =>
+      !_isAutoFilling &&
+      _state.selectedImage != null &&
+      _titleController.text.isEmpty &&
+      _descController.text.isEmpty &&
+      _priceController.text.isEmpty &&
+      _categoryController.text.isEmpty;
+
+  Future<void> _autoFillForm() async {
+    setState(() => _isAutoFilling = true);
+
+    try {
+      final result = await _state.requestSuggestions();
+      if (result != null && mounted) {
+        _titleController.text = result['title']?.toString() ?? '';
+        _descController.text = result['description']?.toString() ?? '';
+        _priceController.text = result['price']?.toString() ?? '';
+        _categoryController.text = result['category']?.toString() ?? '';
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Auto-fill failed: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _isAutoFilling = false);
+    }
+  }
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
@@ -55,6 +112,7 @@ class _NewListingScreenState extends State<NewListingScreen> {
                 child: Column(
                   children: [
                     TextFormField(
+                      controller: _titleController,
                       decoration: const InputDecoration(labelText: 'Title'),
                       validator: (value) =>
                           value == null || value.isEmpty ? 'Required' : null,
@@ -62,6 +120,7 @@ class _NewListingScreenState extends State<NewListingScreen> {
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
+                      controller: _descController,
                       decoration: const InputDecoration(
                         labelText: 'Description',
                       ),
@@ -69,6 +128,7 @@ class _NewListingScreenState extends State<NewListingScreen> {
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
+                      controller: _priceController,
                       decoration: const InputDecoration(labelText: 'Price'),
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
@@ -79,6 +139,7 @@ class _NewListingScreenState extends State<NewListingScreen> {
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
+                      controller: _categoryController,
                       decoration: const InputDecoration(labelText: 'Category'),
                       onSaved: (value) => _state.category = value ?? '',
                     ),
@@ -112,9 +173,33 @@ class _NewListingScreenState extends State<NewListingScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _submitForm,
-                      child: const Text('Submit Listing'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FilledButton.icon(
+                          onPressed: _canAutoFill ? _autoFillForm : null,
+                          icon: _isAutoFilling
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Icon(Icons.auto_awesome),
+                          label: Text(
+                            _isAutoFilling
+                                ? 'Auto-filling...'
+                                : 'Auto-fill Form',
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        ElevatedButton(
+                          onPressed: _submitForm,
+                          child: const Text('Submit Listing'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
