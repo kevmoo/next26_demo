@@ -85,12 +85,29 @@ class _ListingCardState extends State<_ListingCard> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: widget.listing.imageUrl.isNotEmpty
-                    ? Image.network(
-                        widget.listing.imageUrl,
-                        fit: BoxFit.contain,
-                      )
-                    : const Icon(Icons.image, size: 50),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 5,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: widget.listing.imageUrl.isNotEmpty
+                        ? Image.network(
+                            widget.listing.imageUrl,
+                            fit: BoxFit.contain,
+                          )
+                        : const Icon(Icons.image, size: 50),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

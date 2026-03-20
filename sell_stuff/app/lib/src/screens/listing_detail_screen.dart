@@ -40,9 +40,26 @@ class ListingDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (listing.imageUrl.isNotEmpty)
-                  AspectRatio(
-                    aspectRatio: 4 / 3,
-                    child: Image.network(listing.imageUrl, fit: BoxFit.contain),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: AspectRatio(
+                      aspectRatio: 4 / 3,
+                      child: Image.network(
+                        listing.imageUrl,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 const SizedBox(height: 16),
                 Text(
