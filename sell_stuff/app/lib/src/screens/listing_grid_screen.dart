@@ -43,44 +43,73 @@ class ListingGridScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final data = docs[index].data() as Map<String, dynamic>;
             final listing = Listing.fromJson(data);
-
-            return GestureDetector(
-              onTap: () => context.push('/listing/${listing.id}'),
-              child: Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: listing.imageUrl.isNotEmpty
-                          ? Image.network(listing.imageUrl, fit: BoxFit.contain)
-                          : const Icon(Icons.image, size: 50),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        listing.title,
-                        style: Theme.of(context).textTheme.titleMedium,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        '\$${listing.price.toStringAsFixed(2)}',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyLarge?.copyWith(color: Colors.green),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
-              ),
-            );
+            return _ListingCard(listing: listing);
           },
         );
       },
+    ),
+  );
+}
+
+class _ListingCard extends StatefulWidget {
+  final Listing listing;
+
+  const _ListingCard({required this.listing});
+
+  @override
+  State<_ListingCard> createState() => _ListingCardState();
+}
+
+class _ListingCardState extends State<_ListingCard> {
+  bool _isHovering = false;
+
+  @override
+  Widget build(BuildContext context) => MouseRegion(
+    cursor: SystemMouseCursors.click,
+    onEnter: (_) => setState(() => _isHovering = true),
+    onExit: (_) => setState(() => _isHovering = false),
+    child: GestureDetector(
+      onTap: () => context.push('/listing/${widget.listing.id}'),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        transform: Matrix4.translationValues(0, _isHovering ? -4 : 0, 0),
+        child: Card(
+          elevation: _isHovering ? 8 : 2,
+          clipBehavior: Clip.hardEdge,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: widget.listing.imageUrl.isNotEmpty
+                    ? Image.network(
+                        widget.listing.imageUrl,
+                        fit: BoxFit.contain,
+                      )
+                    : const Icon(Icons.image, size: 50),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.listing.title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  '\$${widget.listing.price.toStringAsFixed(2)}',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: Colors.green),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      ),
     ),
   );
 }
