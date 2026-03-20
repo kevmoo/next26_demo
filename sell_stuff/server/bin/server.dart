@@ -41,7 +41,7 @@ void main(List<String> args) async {
     });
 
     firebase.https.onRequest(name: editListingCallable, (request) async {
-      if (request.method != 'POST') {
+      if (request.method != 'PUT') {
         throw FailedPreconditionError('Method Not Allowed');
       }
 
