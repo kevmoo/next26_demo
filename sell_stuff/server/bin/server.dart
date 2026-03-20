@@ -31,6 +31,8 @@ void main(List<String> args) async {
 
       final validData = Map<String, dynamic>.from(data);
       validData['sellerId'] = userId;
+      validData['id'] = data['id'] ?? '';
+      validData['imageUrl'] = data['imageUrl'] ?? '';
 
       await _processImageUpload(validData, storageController);
 
@@ -65,6 +67,8 @@ void main(List<String> args) async {
 
       final validData = Map<String, dynamic>.from(data);
       validData['sellerId'] = userId;
+      validData['id'] = data['id'] ?? '';
+      validData['imageUrl'] = data['imageUrl'] ?? '';
 
       await _processImageUpload(validData, storageController);
 
