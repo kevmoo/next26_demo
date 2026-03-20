@@ -5,16 +5,16 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../widgets/constrained_content.dart';
-import 'sell_page_state.dart';
+import 'new_listing_state.dart';
 
-class SellPageScreen extends StatefulWidget {
-  const SellPageScreen({super.key});
+class NewListingScreen extends StatefulWidget {
+  const NewListingScreen({super.key});
 
   @override
-  State<SellPageScreen> createState() => _SellPageScreenState();
+  State<NewListingScreen> createState() => _NewListingScreenState();
 }
 
-class _SellPageScreenState extends State<SellPageScreen> {
+class _NewListingScreenState extends State<NewListingScreen> {
   final _formKey = GlobalKey<FormState>();
   final _state = NewItemState();
   bool _isLoading = false;

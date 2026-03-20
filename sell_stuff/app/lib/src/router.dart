@@ -8,7 +8,7 @@ import 'screens/app_chrome.dart';
 import 'screens/listing_detail_screen.dart';
 import 'screens/listing_grid_screen.dart';
 import 'screens/login.dart';
-import 'screens/sell_page_screen.dart';
+import 'screens/new_listing_screen.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -21,8 +21,8 @@ final router = GoRouter(
           builder: (context, state) => const ListingGridScreen(),
           routes: [
             GoRoute(
-              path: 'sell',
-              builder: (context, state) => const SellPageScreen(),
+              path: 'new_listing',
+              builder: (context, state) => const NewListingScreen(),
             ),
             GoRoute(
               path: 'listing/:id',
