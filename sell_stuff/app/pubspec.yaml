@@ -19,6 +19,7 @@ dependencies:
   flutter:
     sdk: flutter
   go_router: ^17.0.1
+  http: ^1.6.0
   image_picker: ^1.2.1
   sell_stuff_shared: any
   stream_transform: ^2.1.1

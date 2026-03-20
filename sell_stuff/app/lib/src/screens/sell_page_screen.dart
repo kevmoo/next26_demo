@@ -1,9 +1,13 @@
-import 'package:cloud_functions/cloud_functions.dart';
+import 'dart:convert';
+
 import 'package:desktop_drop/desktop_drop.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:sell_stuff_shared/shared.dart';
 
@@ -53,18 +57,52 @@ class _SellPageScreenState extends State<SellPageScreen> {
         imageUrl = await ref.getDownloadURL();
       }
 
-      final callable = FirebaseFunctions.instance.httpsCallable(
-        createListingCallable,
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw Exception('User is not signed in.');
+      }
+      final idToken = await user.getIdToken();
+      if (idToken == null) {
+        throw Exception('Failed to get auth token.');
+      }
+
+      final options = Firebase.app().options;
+      final projectId = options.projectId;
+
+      late Uri uri;
+      if (kDebugMode) {
+        uri = Uri.parse(
+          'http://localhost:5001/$projectId/us-central1/$createListingCallable',
+        );
+      } else {
+        uri = Uri.parse(
+          'https://us-central1-$projectId.cloudfunctions.net/$createListingCallable',
+        );
+      }
+
+      final response = await http.post(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $idToken',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'id': '',
+          'title': _title,
+          'description': _description,
+          'price': price,
+          'category': _category,
+          'imageUrl': imageUrl,
+          'sellerId': '', // Handled by server backend
+        }),
       );
-      await callable.call<dynamic>({
-        'id': '',
-        'title': _title,
-        'description': _description,
-        'price': price,
-        'category': _category,
-        'imageUrl': imageUrl,
-        'sellerId': '', // Handled by server backend
-      });
+
+      if (response.statusCode != 200) {
+        throw Exception(
+          'Failed to create listing: '
+          '${response.statusCode} ${response.body}',
+        );
+      }
 
       if (mounted) {
         context.pop();
