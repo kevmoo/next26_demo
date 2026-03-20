@@ -16,6 +16,8 @@ class NewItemState {
   XFile? selectedImage;
 
   Future<void> submit() async {
+    final idToken = await _getIdToken();
+
     final price = double.tryParse(priceString);
     if (price == null || price <= 0) {
       throw Exception('Invalid price');
@@ -29,28 +31,7 @@ class NewItemState {
       imageMimeType = selectedImage!.mimeType ?? 'image/jpeg';
     }
 
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw Exception('User is not signed in.');
-    }
-    final idToken = await user.getIdToken();
-    if (idToken == null) {
-      throw Exception('Failed to get auth token.');
-    }
-
-    final options = Firebase.app().options;
-    final projectId = options.projectId;
-
-    late Uri uri;
-    if (kDebugMode) {
-      uri = Uri.parse(
-        'http://localhost:5001/$projectId/us-central1/$createListingCallable',
-      );
-    } else {
-      uri = Uri.parse(
-        'https://us-central1-$projectId.cloudfunctions.net/$createListingCallable',
-      );
-    }
+    final uri = _getUri(createListingCallable);
 
     final createRequest = CreateListingRequest(
       title: title,
@@ -79,34 +60,14 @@ class NewItemState {
   }
 
   Future<Map<String, dynamic>?> requestSuggestions() async {
+    final idToken = await _getIdToken();
     if (selectedImage == null) return null;
 
     final bytes = await selectedImage!.readAsBytes();
     final imageBase64 = base64Encode(bytes);
     final imageMimeType = selectedImage!.mimeType ?? 'image/jpeg';
 
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw Exception('User is not signed in.');
-    }
-    final idToken = await user.getIdToken();
-    if (idToken == null) {
-      throw Exception('Failed to get auth token.');
-    }
-
-    final options = Firebase.app().options;
-    final projectId = options.projectId;
-
-    late Uri uri;
-    if (kDebugMode) {
-      uri = Uri.parse(
-        'http://localhost:5001/$projectId/us-central1/$suggestionDetailsCallable',
-      );
-    } else {
-      uri = Uri.parse(
-        'https://us-central1-$projectId.cloudfunctions.net/$suggestionDetailsCallable',
-      );
-    }
+    final uri = _getUri(suggestionDetailsCallable);
 
     final abortCompleter = Completer<void>();
     final client = http.Client();
@@ -151,5 +112,32 @@ class NewItemState {
     } finally {
       client.close();
     }
+  }
+}
+
+Future<String> _getIdToken() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    throw Exception('User is not signed in.');
+  }
+  final idToken = await user.getIdToken();
+  if (idToken == null) {
+    throw Exception('Failed to get auth token.');
+  }
+  return idToken;
+}
+
+Uri _getUri(String callableName) {
+  final options = Firebase.app().options;
+  final projectId = options.projectId;
+
+  if (kDebugMode) {
+    return Uri.parse(
+      'http://localhost:5001/$projectId/us-central1/$callableName',
+    );
+  } else {
+    return Uri.parse(
+      'https://us-central1-$projectId.cloudfunctions.net/$callableName',
+    );
   }
 }
