@@ -60,12 +60,14 @@ class _NewListingScreenState extends State<NewListingScreen> {
                           value == null || value.isEmpty ? 'Required' : null,
                       onSaved: (value) => _state.title = value ?? '',
                     ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Description',
                       ),
                       onSaved: (value) => _state.description = value ?? '',
                     ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       decoration: const InputDecoration(labelText: 'Price'),
                       keyboardType: const TextInputType.numberWithOptions(
@@ -75,6 +77,7 @@ class _NewListingScreenState extends State<NewListingScreen> {
                           value == null || value.isEmpty ? 'Required' : null,
                       onSaved: (value) => _state.priceString = value ?? '',
                     ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       decoration: const InputDecoration(labelText: 'Category'),
                       onSaved: (value) => _state.category = value ?? '',
