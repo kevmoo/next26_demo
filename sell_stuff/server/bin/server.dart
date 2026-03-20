@@ -11,22 +11,22 @@ void main(List<String> args) async {
   await fireUp(args, (firebase) {
     firebase.https.onRequest(name: createListingCallable, (request) async {
       if (request.method != 'POST') {
-        return Response(405, body: 'Method Not Allowed');
+        throw FailedPreconditionError('Method Not Allowed');
       }
 
       final userId = _authIdFromRequest(request);
       if (userId == null) {
-        return Response(401, body: 'User is not signed-in!');
+        throw UnauthenticatedError('User is not signed-in!');
       }
 
       final bodyStr = await request.readAsString();
       final data = jsonDecode(bodyStr) as Map<String, dynamic>;
 
       if (data['title'] == null || (data['title'] as String).isEmpty) {
-        return Response(400, body: 'Title cannot be empty');
+        throw InvalidArgumentError('Title cannot be empty');
       }
       if (data['price'] == null || (data['price'] as num) <= 0) {
-        return Response(400, body: 'Price must be greater than zero');
+        throw InvalidArgumentError('Price must be greater than zero');
       }
 
       final validData = Map<String, dynamic>.from(data);
@@ -42,37 +42,33 @@ void main(List<String> args) async {
 
     firebase.https.onRequest(name: editListingCallable, (request) async {
       if (request.method != 'POST') {
-        return Response(405, body: 'Method Not Allowed');
+        throw FailedPreconditionError('Method Not Allowed');
       }
 
       final userId = _authIdFromRequest(request);
       if (userId == null) {
-        return Response(401, body: 'User is not signed-in!');
+        throw UnauthenticatedError('User is not signed-in!');
       }
 
       final bodyStr = await request.readAsString();
       final data = jsonDecode(bodyStr) as Map<String, dynamic>;
 
       if (data['title'] == null || (data['title'] as String).isEmpty) {
-        return Response(400, body: 'Title cannot be empty');
+        throw InvalidArgumentError('Title cannot be empty');
       }
       if (data['price'] == null || (data['price'] as num) <= 0) {
-        return Response(400, body: 'Price must be greater than zero');
+        throw InvalidArgumentError('Price must be greater than zero');
       }
 
       final validData = Map<String, dynamic>.from(data);
       validData['sellerId'] = userId;
       final listing = Listing.fromJson(validData);
 
-      try {
-        final updatedListing = await storageController.editListing(listing);
-        return Response.ok(
-          jsonEncode(updatedListing.toJson()),
-          headers: {'content-type': 'application/json'},
-        );
-      } catch (e) {
-        return Response(400, body: e.toString());
-      }
+      final updatedListing = await storageController.editListing(listing);
+      return Response.ok(
+        jsonEncode(updatedListing.toJson()),
+        headers: {'content-type': 'application/json'},
+      );
     });
 
     print('Functions registered successfully!');
