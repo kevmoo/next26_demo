@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:sell_stuff_shared/shared.dart';
+
+import 'sell_page_state.dart';
 
 class SellPageScreen extends StatefulWidget {
   const SellPageScreen({super.key});
@@ -19,11 +15,7 @@ class SellPageScreen extends StatefulWidget {
 
 class _SellPageScreenState extends State<SellPageScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _title = '';
-  String _description = '';
-  String _priceString = '';
-  String _category = '';
-  XFile? _selectedImage;
+  final _state = NewItemState();
   bool _isLoading = false;
   bool _isDragging = false;
 
@@ -31,72 +23,10 @@ class _SellPageScreenState extends State<SellPageScreen> {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
 
-    final price = double.tryParse(_priceString);
-    if (price == null || price <= 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Invalid price')));
-      return;
-    }
-
     setState(() => _isLoading = true);
 
     try {
-      var imageBase64 = '';
-      var imageMimeType = '';
-      if (_selectedImage != null) {
-        final bytes = await _selectedImage!.readAsBytes();
-        imageBase64 = base64Encode(bytes);
-        imageMimeType = _selectedImage!.mimeType ?? 'image/jpeg';
-      }
-
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception('User is not signed in.');
-      }
-      final idToken = await user.getIdToken();
-      if (idToken == null) {
-        throw Exception('Failed to get auth token.');
-      }
-
-      final options = Firebase.app().options;
-      final projectId = options.projectId;
-
-      late Uri uri;
-      if (kDebugMode) {
-        uri = Uri.parse(
-          'http://localhost:5001/$projectId/us-central1/$createListingCallable',
-        );
-      } else {
-        uri = Uri.parse(
-          'https://us-central1-$projectId.cloudfunctions.net/$createListingCallable',
-        );
-      }
-
-      final createRequest = CreateListingRequest(
-        title: _title,
-        description: _description,
-        price: price,
-        category: _category,
-        imageBase64: imageBase64,
-        imageMimeType: imageMimeType,
-      );
-
-      final response = await http.post(
-        uri,
-        headers: {
-          'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(createRequest.toJson()),
-      );
-
-      if (response.statusCode != 200) {
-        throw Exception(
-          'Failed to create listing: '
-          '${response.statusCode} ${response.body}',
-        );
-      }
+      await _state.submit();
 
       if (mounted) {
         context.pop();
@@ -128,13 +58,13 @@ class _SellPageScreenState extends State<SellPageScreen> {
                         decoration: const InputDecoration(labelText: 'Title'),
                         validator: (value) =>
                             value == null || value.isEmpty ? 'Required' : null,
-                        onSaved: (value) => _title = value ?? '',
+                        onSaved: (value) => _state.title = value ?? '',
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Description',
                         ),
-                        onSaved: (value) => _description = value ?? '',
+                        onSaved: (value) => _state.description = value ?? '',
                       ),
                       TextFormField(
                         decoration: const InputDecoration(labelText: 'Price'),
@@ -143,20 +73,20 @@ class _SellPageScreenState extends State<SellPageScreen> {
                         ),
                         validator: (value) =>
                             value == null || value.isEmpty ? 'Required' : null,
-                        onSaved: (value) => _priceString = value ?? '',
+                        onSaved: (value) => _state.priceString = value ?? '',
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Category',
                         ),
-                        onSaved: (value) => _category = value ?? '',
+                        onSaved: (value) => _state.category = value ?? '',
                       ),
                       const SizedBox(height: 20),
                       DropTarget(
                         onDragDone: (detail) async {
                           if (detail.files.isNotEmpty) {
                             setState(() {
-                              _selectedImage = detail.files.first;
+                              _state.selectedImage = detail.files.first;
                             });
                           }
                         },
@@ -177,7 +107,7 @@ class _SellPageScreenState extends State<SellPageScreen> {
                                 ? Colors.blue.withAlpha(25)
                                 : null,
                           ),
-                          child: _selectedImage != null
+                          child: _state.selectedImage != null
                               ? _buildImagePreview()
                               : _buildImagePickerPlaceholder(),
                         ),
@@ -196,9 +126,9 @@ class _SellPageScreenState extends State<SellPageScreen> {
   );
 
   Widget _buildImagePreview() => kIsWeb
-      ? Image.network(_selectedImage!.path, fit: BoxFit.contain)
+      ? Image.network(_state.selectedImage!.path, fit: BoxFit.contain)
       : FutureBuilder<Uint8List>(
-          future: _selectedImage!.readAsBytes(),
+          future: _state.selectedImage!.readAsBytes(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Image.memory(snapshot.data!, fit: BoxFit.contain);
@@ -224,7 +154,7 @@ class _SellPageScreenState extends State<SellPageScreen> {
             final picker = ImagePicker();
             final picked = await picker.pickImage(source: ImageSource.gallery);
             if (picked != null) {
-              setState(() => _selectedImage = picked);
+              setState(() => _state.selectedImage = picked);
             }
           },
           child: const Text('Browse Files'),
