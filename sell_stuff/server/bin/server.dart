@@ -10,6 +10,10 @@ void main(List<String> args) async {
 
   await fireUp(args, (firebase) {
     firebase.https.onRequest(name: createListingCallable, (request) async {
+      if (request.method != 'POST') {
+        return Response(405, body: 'Method Not Allowed');
+      }
+
       final userId = _authIdFromRequest(request);
       if (userId == null) {
         return Response(401, body: 'User is not signed-in!');
@@ -37,6 +41,10 @@ void main(List<String> args) async {
     });
 
     firebase.https.onRequest(name: editListingCallable, (request) async {
+      if (request.method != 'POST') {
+        return Response(405, body: 'Method Not Allowed');
+      }
+
       final userId = _authIdFromRequest(request);
       if (userId == null) {
         return Response(401, body: 'User is not signed-in!');
