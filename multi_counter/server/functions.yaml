@@ -8,7 +8,7 @@ endpoints:
     region:
       - us-central1
     httpsTrigger: {}
-    baseImageUri: us-central1-docker.pkg.dev/serverless-runtimes/google-22-full/runtimes/go123
+    baseImageUri: us-central1-docker.pkg.dev/serverless-runtimes/google-24/osonly24
     command:
       - ./bin/server
     entryPoint: increment
