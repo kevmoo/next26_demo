@@ -10,3 +10,7 @@ workspace:
 
 dev_dependencies:
   dart_flutter_team_lints: ^3.0.0
+
+dependency_overrides:
+  # TODO: need to get this fixed!
+  email_validator: ^3.0.0
