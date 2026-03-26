@@ -29,7 +29,6 @@ Future<String?> _authIdFromRequest(Request request) async {
 
   try {
     final decoded = await _app.auth().verifyIdToken(idToken);
-    print('Decoded: ${decoded.authTime} ${decoded.uid} ${decoded.email}');
     return decoded.uid;
   } catch (_) {
     return null;
