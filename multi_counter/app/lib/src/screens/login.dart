@@ -1,26 +1,67 @@
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
+import '../widgets/app_scaffold.dart';
+import '../widgets/centered_premium_card.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
+  Future<void> _signIn() async {
+    try {
+      final googleProvider = GoogleAuthProvider()..addScope('email');
+      if (kDebugMode) {
+        await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      } else {
+        await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+      }
+    } catch (e) {
+      print('Google sign in error: $e');
+    }
+  }
+
   @override
-  Widget build(BuildContext context) => SignInScreen(
-    providers: [GoogleProvider(clientId: webClientId)],
-    subtitleBuilder: (context, action) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: action == AuthAction.signIn
-          ? const Text('Welcome to FlutterFire, please sign in!')
-          : const Text('Welcome to FlutterFire, please sign up!'),
-    ),
-    footerBuilder: (context, action) => const Padding(
-      padding: EdgeInsets.only(top: 16),
-      child: Text(
-        'By signing in, you agree to our terms and conditions.',
-        style: TextStyle(color: Colors.grey),
+  Widget build(BuildContext context) => AppScaffold(
+    child: CenteredPremiumCard(
+      useGradient: true,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Welcome to $appTitle',
+            style: Theme.of(context).textTheme.headlineMedium,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Please sign in to continue',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: doubleSpaceSize),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _signIn,
+              icon: const Icon(Icons.login),
+              label: const Text('Sign in with Google'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: spaceSize),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     ),
   );

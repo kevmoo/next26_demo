@@ -18,14 +18,14 @@ dev_dependencies:
 dependency_overrides:
   dart_firebase_admin:
     git:
-      url: https://github.com/invertase/dart_firebase_admin
+      url: https://github.com/firebase/firebase-admin-dart
       path: packages/dart_firebase_admin
 
   firebase_functions:
     git:
-      url: https://github.com/invertase/firebase_functions
+      url: https://github.com/firebase/firebase-functions-dart
 
   google_cloud_firestore:
     git:
-      url: https://github.com/invertase/dart_firebase_admin
+      url: https://github.com/firebase/firebase-admin-dart
       path: packages/google_cloud_firestore

@@ -10,14 +10,13 @@ import 'screens/login.dart';
 final router = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) =>
-          const CounterScreen(title: 'Firebase Multi-player Counter Demo'),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const CounterScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
   ],
-  redirect: (context, state) {
+  redirect: (context, state) async {
+    // Ensure we capture the redirect result before checking the auth state.
+    await FirebaseAuth.instance.getRedirectResult();
+
     final loggedIn = FirebaseAuth.instance.currentUser != null;
     final loggingIn = state.matchedLocation == '/login';
 

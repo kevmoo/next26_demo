@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_counter_shared/multi_counter_shared.dart';
@@ -84,21 +83,7 @@ class CounterState {
     final idToken = await user.getIdToken();
     if (idToken == null) return null;
 
-    final options = Firebase.app().options;
-    final projectId = options.projectId;
-
-    late Uri uri;
-    if (kDebugMode) {
-      // In debug mode, we point to the emulator running locally.
-      uri = Uri.parse(
-        'http://localhost:5001/$projectId/us-central1/$incrementCallable',
-      );
-    } else {
-      // In production, we point to the deployed Cloud Function.
-      uri = Uri.parse(
-        'https://us-central1-$projectId.cloudfunctions.net/$incrementCallable',
-      );
-    }
+    final uri = Uri.parse('https://increment-ruyjilv5wq-uc.a.run.app');
 
     return http.post(uri, headers: {'Authorization': 'Bearer $idToken'});
   }
