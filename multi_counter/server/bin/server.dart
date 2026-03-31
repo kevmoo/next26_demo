@@ -4,13 +4,12 @@ import 'package:multi_counter_server/src/storage_controller.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 void main(List<String> args) async {
-  final storageController = await createStorageController();
-  FirebaseApp? app;
+  final app = FirebaseApp.initializeApp();
+  final storageController = StorageController(app.firestore());
 
   await fireUp(args, (firebase) {
     firebase.https.onRequest(name: incrementCallable, (request) async {
-      app ??= FirebaseApp.initializeApp();
-      final userId = await _authIdFromRequest(request, app!);
+      final userId = await _authIdFromRequest(request, app);
 
       await storageController.increment(userId);
 

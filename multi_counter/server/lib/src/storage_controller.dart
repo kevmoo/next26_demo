@@ -1,17 +1,10 @@
-import 'package:dart_firebase_admin/dart_firebase_admin.dart';
 import 'package:google_cloud_firestore/google_cloud_firestore.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
-
-Future<StorageController> createStorageController() async {
-  final app = FirebaseApp.initializeApp();
-
-  return StorageController._(app.firestore());
-}
 
 class StorageController {
   final Firestore _firestore;
 
-  StorageController._(this._firestore);
+  StorageController(this._firestore);
 
   Future<void> increment(String userId) async {
     try {
