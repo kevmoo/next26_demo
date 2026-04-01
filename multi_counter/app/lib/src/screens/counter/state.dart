@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+import '../../config_state.dart';
+
 typedef GlobalData = ({int totalUsers, int totalClicks});
 
 class CounterState {
@@ -83,21 +85,29 @@ class CounterState {
     final idToken = await user.getIdToken();
     if (idToken == null) return null;
 
-    final uri = Uri.parse('https://increment-ruyjilv5wq-uc.a.run.app');
-
-    return http.post(uri, headers: {'Authorization': 'Bearer $idToken'});
+    return http.post(
+      incrementUri,
+      headers: {'Authorization': 'Bearer $idToken'},
+    );
   }
 
   void _handleIncrementResult(http.Response? response) {
     if (response == null) {
       print('Request failed: user is not authenticated.');
+      _responseController.add(
+        IncrementResponse.failure('User is not authenticated.'),
+      );
       return;
     }
 
     if (response.statusCode == 200) {
       print('Incremented: ${response.body}');
+      _responseController.add(IncrementResponse.success());
     } else {
-      print('Unexpected error: \${response.statusCode} \${response.body}');
+      print('Unexpected error: ${response.statusCode} ${response.body}');
+      _responseController.add(
+        IncrementResponse.failure('Error: ${response.statusCode}'),
+      );
     }
   }
 

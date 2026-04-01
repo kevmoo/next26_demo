@@ -18,10 +18,13 @@ class CounterScreen extends StatefulWidget {
 class _CounterScreenState extends State<CounterScreen> {
   final state = CounterState();
   late final StreamSubscription<IncrementResponse> _sub;
+  late final Listenable _merger;
 
   @override
   void initState() {
     super.initState();
+
+    _merger = Listenable.merge([state.userCounter, state.globalCounter]);
 
     ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
     snackBarController;
@@ -55,7 +58,7 @@ class _CounterScreenState extends State<CounterScreen> {
   @override
   Widget build(BuildContext context) => AppScaffold(
     child: ListenableBuilder(
-      listenable: Listenable.merge([state.userCounter, state.globalCounter]),
+      listenable: _merger,
       builder: (context, child) {
         final globalCount = state.globalCounter.value;
         return CenteredPremiumCard(
