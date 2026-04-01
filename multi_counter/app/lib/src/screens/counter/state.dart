@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -78,37 +78,33 @@ class CounterState {
     _incrementController.add(null);
   }
 
-  Future<http.Response?> _callIncrement() async {
+  Future<void> _callIncrement() async {
     final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return null;
-
-    final idToken = await user.getIdToken();
-    if (idToken == null) return null;
-
-    return http.post(
-      incrementUri,
-      headers: {'Authorization': 'Bearer $idToken'},
-    );
-  }
-
-  void _handleIncrementResult(http.Response? response) {
-    if (response == null) {
-      print('Request failed: user is not authenticated.');
+    if (user == null) {
       _responseController.add(
         IncrementResponse.failure('User is not authenticated.'),
       );
       return;
     }
 
-    if (response.statusCode == 200) {
-      print('Incremented: ${response.body}');
-      _responseController.add(IncrementResponse.success());
-    } else {
-      print('Unexpected error: ${response.statusCode} ${response.body}');
+    final idToken = await user.getIdToken();
+    if (idToken == null) {
       _responseController.add(
-        IncrementResponse.failure('Error: ${response.statusCode}'),
+        IncrementResponse.failure('User is not authenticated.'),
       );
+      return;
     }
+
+    try {
+      await incrementHttpsCallable.call<void>();
+    } on FirebaseFunctionsException catch (e) {
+      print('Error calling increment: ${e.code} ${e.message}');
+      _responseController.add(IncrementResponse.failure('Error: ${e.code}'));
+    }
+  }
+
+  void _handleIncrementResult(_) {
+    // TODO: handle the result
   }
 
   void dispose() {

@@ -6,36 +6,21 @@ void main(List<String> args) async {
   await fireUp(args, (firebase) async {
     final storageController = StorageController(firebase.adminApp.firestore());
 
-    Future<String> authIdFromRequest(Request request) async {
-      final idToken = request.headers['Authorization']?.split(' ').last;
-      if (idToken == null) {
-        throw UnauthenticatedError('User is not signed-in!');
-      }
+    firebase.https.onCall(
+      name: incrementCallable,
 
-      final decoded = await firebase.adminApp.auth().verifyIdToken(idToken);
-      return decoded.uid;
-    }
-
-    firebase.https.onRequest(name: incrementCallable, (request) async {
-      if (request.method == 'OPTIONS') {
-        return Response(204, headers: _corsHeaders);
-      }
-
-      if (request.method != 'POST') {
-        return Response.badRequest(body: 'Only POST requests are allowed.');
-      }
-
-      final userId = await authIdFromRequest(request);
-
-      await storageController.increment(userId);
-
-      return Response.ok('success', headers: _corsHeaders);
-    });
+      options: const CallableOptions(
+        // TODO: should be explicit here about the supported hosts
+        cors: OptionLiteral(['*']),
+      ),
+      (request, response) async {
+        if (request.auth case AuthData auth?) {
+          await storageController.increment(auth.uid);
+          return CallableResult('success');
+        } else {
+          throw UnauthenticatedError();
+        }
+      },
+    );
   });
 }
-
-final _corsHeaders = <String, String>{
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};

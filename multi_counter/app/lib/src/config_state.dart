@@ -1,35 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 import '../firebase_options.dart';
 
 Future<void> initializeWorld() async {
-  final options = DefaultFirebaseOptions.currentPlatform;
-  final debugOptions = FirebaseOptions(
-    apiKey: options.apiKey,
-    appId: options.appId,
-    messagingSenderId: options.messagingSenderId,
-    projectId: 'demo-server',
-    authDomain: options.authDomain,
-    databaseURL: options.databaseURL,
-    storageBucket: options.storageBucket,
-    measurementId: options.measurementId,
-  );
-
-  await Firebase.initializeApp(options: kDebugMode ? debugOptions : options);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   if (kDebugMode) {
     await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);
     FirebaseFirestore.instance.useFirestoreEmulator('127.0.0.1', 8080);
+    FirebaseFunctions.instance.useFunctionsEmulator('127.0.0.1', 5001);
   }
 }
 
-Uri get incrementUri {
+final _options = HttpsCallableOptions(timeout: const Duration(seconds: 3));
+
+HttpsCallable get incrementHttpsCallable {
   if (kDebugMode) {
-    return Uri.parse('http://127.0.0.1:5001/demo-server/us-central1/increment');
+    return FirebaseFunctions.instance.httpsCallable(
+      incrementCallable,
+      options: _options,
+    );
   } else {
-    return Uri.parse('https://increment-ruyjilv5wq-uc.a.run.app');
+    return FirebaseFunctions.instance.httpsCallableFromUrl(
+      'https://increment-ruyjilv5wq-uc.a.run.app',
+      options: _options,
+    );
   }
 }

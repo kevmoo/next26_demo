@@ -335,7 +335,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: c01671f3625952f0bfd28b5281a05bc84d9accb0
+      resolved-ref: "22f3500055be4341ab4512434abee4b379bd9af0"
       url: "https://github.com/firebase/firebase-functions-dart"
     source: git
     version: "0.1.0"
