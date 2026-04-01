@@ -15,8 +15,6 @@ class MyApp extends StatelessWidget {
       colorScheme: const ColorScheme.light(
         primary: Color(0xFF18181B), // Zinc 900
         secondary: Color(0xFF3F3F46), // Zinc 700
-        surface: Colors.white,
-        onPrimary: Colors.white,
         onSecondary: Colors.white,
       ),
       appBarTheme: const AppBarTheme(
@@ -40,6 +38,5 @@ class MyApp extends StatelessWidget {
         elevation: 0,
       ),
     ),
-    themeMode: ThemeMode.system,
   );
 }

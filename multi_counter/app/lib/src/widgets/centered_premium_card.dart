@@ -49,7 +49,7 @@ class CenteredPremiumCard extends StatelessWidget {
                   offset: const Offset(0, 10),
                 ),
               ],
-              border: Border.all(color: colorScheme.outlineVariant, width: 1),
+              border: Border.all(color: colorScheme.outlineVariant),
             ),
             child: Padding(padding: padding, child: child),
           ),
