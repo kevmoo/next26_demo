@@ -31,14 +31,6 @@ void main(List<String> args) async {
 
       return Response.ok('success', headers: _corsHeaders);
     });
-
-    firebase.https.onRequest(name: 'logging_function', (request) async {
-      logger.debug('dude!');
-
-      throw ArgumentError('oops');
-    });
-
-    print('Functions registered successfully!');
   });
 }
 
