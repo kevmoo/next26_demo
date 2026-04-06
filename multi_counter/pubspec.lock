@@ -335,7 +335,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "22f3500055be4341ab4512434abee4b379bd9af0"
+      resolved-ref: "7c57b6e15cc0464ec96e6eccfb4388d4cf71c9b2"
       url: "https://github.com/firebase/firebase-functions-dart"
     source: git
     version: "0.1.0"
@@ -374,10 +374,10 @@ packages:
     dependency: transitive
     description:
       name: go_router
-      sha256: "7974313e217a7771557add6ff2238acb63f635317c35fa590d348fb238f00896"
+      sha256: "48fb2f42ad057476fa4b733cb95e9f9ea7b0b010bb349ea491dca7dbdb18ffc4"
       url: "https://pub.dev"
     source: hosted
-    version: "17.1.0"
+    version: "17.2.0"
   google_cloud:
     dependency: transitive
     description:
