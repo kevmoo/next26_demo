@@ -4,7 +4,7 @@ import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 void main(List<String> args) async {
   await fireUp(args, (firebase) async {
-    final storageController = StorageController(firebase.adminApp.firestore());
+    final storageController = StorageController(firebase.firestoreAdmin);
 
     firebase.https.onCall(
       name: incrementCallable,
