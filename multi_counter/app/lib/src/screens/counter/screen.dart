@@ -5,7 +5,6 @@ import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 import '../../constants.dart';
 import '../../widgets/app_scaffold.dart';
-import '../../widgets/centered_premium_card.dart';
 import 'state.dart';
 
 class CounterScreen extends StatefulWidget {
@@ -61,7 +60,7 @@ class _CounterScreenState extends State<CounterScreen> {
       listenable: _merger,
       builder: (context, child) {
         final globalCount = state.globalCounter.value;
-        return CenteredPremiumCard(
+        return SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
