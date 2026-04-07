@@ -8,14 +8,12 @@ import 'centered_premium_card.dart';
 class AppScaffold extends StatelessWidget {
   final Widget child;
   final String? title;
-  final List<Widget>? actions;
   final bool useCardGradient;
 
   const AppScaffold({
     super.key,
     required this.child,
     this.title,
-    this.actions,
     this.useCardGradient = false,
   });
 
@@ -36,18 +34,13 @@ class AppScaffold extends StatelessWidget {
     body: SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: spaceSize),
+          padding: const EdgeInsets.symmetric(
+            vertical: spaceSize / 2,
+            horizontal: spaceSize / 2,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: spaceSize),
-              Text(
-                title ?? appTitle,
-                style: Theme.of(context).textTheme.headlineMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: doubleSpaceSize),
-
               // Content
               child,
 
@@ -85,11 +78,6 @@ class AppScaffold extends StatelessWidget {
   );
 
   Widget _buildLargeLayout(BuildContext context, User? user) => Scaffold(
-    appBar: AppBar(
-      title: Text(title ?? appTitle),
-      actions: actions,
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-    ),
     body: CenteredPremiumCard(useGradient: useCardGradient, child: child),
     bottomNavigationBar: SafeArea(
       child: Padding(
