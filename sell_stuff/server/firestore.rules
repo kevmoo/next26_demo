@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Rules for the 'listings' collection
+    match /listings/{listingId} {
+      // Browsing listings requires authentication as enforced by the app router
+      allow read: if request.auth != null;
+      
+      // All writes (creating and editing) are handled by server-side logic
+      // to ensure consistency and validate data (price, images, etc.)
+      allow write: if false;
+    }
+
+    // Default deny for all other paths
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}
