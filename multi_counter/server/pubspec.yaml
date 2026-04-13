@@ -6,7 +6,7 @@ environment:
   sdk: ^3.10.0
 
 dependencies:
-  dart_firebase_admin:
+  firebase_admin_sdk:
   firebase_functions: any
   google_cloud_firestore:
   multi_counter_shared: any # workspace
@@ -16,10 +16,10 @@ dev_dependencies:
   http: ^1.2.2
 
 dependency_overrides:
-  dart_firebase_admin:
+  firebase_admin_sdk:
     git:
       url: https://github.com/firebase/firebase-admin-dart
-      path: packages/dart_firebase_admin
+      path: packages/firebase_admin_sdk
 
   firebase_functions:
     git:
