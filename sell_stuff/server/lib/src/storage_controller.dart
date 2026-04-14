@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:dart_firebase_admin/dart_firebase_admin.dart';
+import 'package:firebase_admin_sdk/firebase_admin_sdk.dart';
 import 'package:google_cloud_firestore/google_cloud_firestore.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:sell_stuff_shared/shared.dart';

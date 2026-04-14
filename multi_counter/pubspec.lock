@@ -278,7 +278,7 @@ packages:
     description:
       path: "packages/firebase_admin_sdk"
       ref: HEAD
-      resolved-ref: "30e4ad70c882cb033f6aacd7faf24ac89d2c2ecb"
+      resolved-ref: "4a306a5f8cf33afa5ef238f62755ee11e0ee974d"
       url: "https://github.com/firebase/firebase-admin-dart"
     source: git
     version: "0.5.0"
@@ -374,10 +374,10 @@ packages:
     dependency: transitive
     description:
       name: go_router
-      sha256: "48fb2f42ad057476fa4b733cb95e9f9ea7b0b010bb349ea491dca7dbdb18ffc4"
+      sha256: "5540e4a3f416dd4a93458257b908eb88353cbd0fb5b0a3d1bd7d849ba1e88735"
       url: "https://pub.dev"
     source: hosted
-    version: "17.2.0"
+    version: "17.2.1"
   google_cloud:
     dependency: transitive
     description:
@@ -391,10 +391,10 @@ packages:
     description:
       path: "packages/google_cloud_firestore"
       ref: HEAD
-      resolved-ref: "30e4ad70c882cb033f6aacd7faf24ac89d2c2ecb"
+      resolved-ref: "4a306a5f8cf33afa5ef238f62755ee11e0ee974d"
       url: "https://github.com/firebase/firebase-admin-dart"
     source: git
-    version: "0.1.0"
+    version: "0.5.0"
   google_cloud_protobuf:
     dependency: transitive
     description:
