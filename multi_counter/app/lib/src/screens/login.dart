@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 import '../widgets/app_scaffold.dart';
-import '../widgets/centered_premium_card.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -24,20 +23,20 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppScaffold(
-    child: CenteredPremiumCard(
-      useGradient: true,
+    useCardGradient: true,
+    child: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Welcome to $appTitle',
+            appTitle,
             style: Theme.of(context).textTheme.headlineMedium,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
-            'Please sign in to continue',
+            'Sign in to continue',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
