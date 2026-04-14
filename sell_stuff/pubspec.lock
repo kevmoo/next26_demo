@@ -25,14 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.68"
-  adaptive_number:
-    dependency: transitive
-    description:
-      name: adaptive_number
-      sha256: "3a567544e9b5c9c803006f51140ad544aedc79604fd4f3f2c1380003f97c1d77"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   analyzer:
     dependency: transitive
     description:
@@ -265,15 +257,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.7"
-  dart_firebase_admin:
-    dependency: "direct overridden"
-    description:
-      path: "packages/dart_firebase_admin"
-      ref: HEAD
-      resolved-ref: "6c09bea248d0f48e71c66fd7a2af41afde88d0d6"
-      url: "https://github.com/invertase/dart_firebase_admin"
-    source: git
-    version: "0.5.0"
   dart_flutter_team_lints:
     dependency: "direct dev"
     description:
@@ -286,10 +269,10 @@ packages:
     dependency: transitive
     description:
       name: dart_jsonwebtoken
-      sha256: b268ff9bb87a16360a397f1accb50e7c781384e1119010b34f6d7c25820c44d8
+      sha256: cb79ed79baa02b4f59a597bf365873cbd83f9bb15273d63f7803802d21717c7d
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "3.4.0"
   dart_style:
     dependency: transitive
     description:
@@ -322,14 +305,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.16"
-  ed25519_edwards:
-    dependency: transitive
-    description:
-      name: ed25519_edwards
-      sha256: "6ce0112d131327ec6d42beede1e5dfd526069b18ad45dcf654f15074ad9276cd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.1"
   email_validator:
     dependency: "direct overridden"
     description:
@@ -402,6 +377,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+5"
+  firebase_admin_sdk:
+    dependency: "direct overridden"
+    description:
+      path: "packages/firebase_admin_sdk"
+      ref: HEAD
+      resolved-ref: "4a306a5f8cf33afa5ef238f62755ee11e0ee974d"
+      url: "https://github.com/firebase/firebase-admin-dart"
+    source: git
+    version: "0.5.0"
   firebase_auth:
     dependency: transitive
     description:
@@ -455,8 +439,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: e5c7f02d6d9de334743484ac7b35e5348226e682
-      url: "https://github.com/invertase/firebase_functions"
+      resolved-ref: "986ece5a6473569e421b9a98d688f694927a9851"
+      url: "https://github.com/firebase/firebase-functions-dart"
     source: git
     version: "0.1.0"
   firebase_storage:
@@ -595,19 +579,19 @@ packages:
     dependency: transitive
     description:
       name: google_cloud
-      sha256: "92092d0fb396834b01bab79cdbfef672e2970696c3190758a08091ab3db45479"
+      sha256: ea0874a719de9972bcc44383398322c3cf19384c8bc1cee109e8368b8f70454e
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.1"
+    version: "0.4.0"
   google_cloud_firestore:
     dependency: "direct overridden"
     description:
       path: "packages/google_cloud_firestore"
       ref: HEAD
-      resolved-ref: "6c09bea248d0f48e71c66fd7a2af41afde88d0d6"
-      url: "https://github.com/invertase/dart_firebase_admin"
+      resolved-ref: "4a306a5f8cf33afa5ef238f62755ee11e0ee974d"
+      url: "https://github.com/firebase/firebase-admin-dart"
     source: git
-    version: "0.1.0"
+    version: "0.5.0"
   google_cloud_protobuf:
     dependency: transitive
     description:
@@ -628,10 +612,10 @@ packages:
     dependency: transitive
     description:
       name: google_cloud_storage
-      sha256: e98ec6210691d27f0f85924b19fbda25d01db32b94d266867f292a0c4aae5df5
+      sha256: "4827b13994073e460cb59e0ccec5503b4f3ef54aa951745f156e96b3b92fc638"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "0.6.0"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -644,18 +628,18 @@ packages:
     dependency: transitive
     description:
       name: googleapis
-      sha256: "692fb9e90c321b61a7a2123de0353ec8a20691cd979db2553d8d732f710f6535"
+      sha256: "62b5988f228b774448ebd99b53fe8069becb55840f1b28948bb84160373dc0b6"
       url: "https://pub.dev"
     source: hosted
-    version: "15.0.0"
+    version: "16.0.0"
   googleapis_auth:
     dependency: transitive
     description:
       name: googleapis_auth
-      sha256: "2e8edbfff4fc0f0c99c9ff72353d72c355a96b8686de4b26f63c86e22696d7b9"
+      sha256: "661738b763d3e524de69df53bf4e03943e4e01e98265cebcc6684871b06a5379"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.0"
   googleapis_beta:
     dependency: transitive
     description:
@@ -784,14 +768,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      sha256: "53385261521cc4a0c4658fd0ad07a7d14591cf8fc33abbceae306ddb974888dc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.2"
   json_annotation:
     dependency: transitive
     description:
@@ -948,10 +924,10 @@ packages:
     dependency: transitive
     description:
       name: pointycastle
-      sha256: "4be0097fcf3fd3e8449e53730c631200ebc7b88016acecab2b0da2f0149222fe"
+      sha256: "92aa3841d083cc4b0f4709b5c74fd6409a3e6ba833ffc7dc6a8fee096366acf5"
       url: "https://pub.dev"
     source: hosted
-    version: "3.9.1"
+    version: "4.0.0"
   pool:
     dependency: transitive
     description:
@@ -1097,10 +1073,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: "8161c84903fd860b26bfdefb7963b3f0b68fee7adea0f59ef805ecca346f0c7a"
+      sha256: "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.10"
+    version: "0.7.11"
   typed_data:
     dependency: transitive
     description:
