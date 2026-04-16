@@ -1,6 +1,0 @@
-.dart_tool
-#pubspec.lock
-multi_counter/app/firebase.json
-multi_counter/app/lib/firebase_options.dart
-.vscode
-.agents/
