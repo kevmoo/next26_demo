@@ -11,7 +11,6 @@
   ],
   "hosting": {
     "predeploy": "cd app && flutter build web --wasm --no-strip-wasm --source-maps",
-    "site": "multi-counter",
     "public": "app/build/web",
     "ignore": [
       "firebase.json",
