@@ -64,6 +64,7 @@ class _CounterScreenState extends State<CounterScreen> {
 
   @override
   Widget build(BuildContext context) => AppScaffold(
+    onSignInWithGoogle: state.signInWithGoogle,
     child: ListenableBuilder(
       listenable: _merger,
       builder: (context, child) {
@@ -98,7 +99,7 @@ class _CounterScreenState extends State<CounterScreen> {
               _spacer,
               QrImageView(
                 data: qrCodeUrl,
-                size: 140.0,
+                size: 240.0,
                 eyeStyle: QrEyeStyle(
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -107,7 +108,6 @@ class _CounterScreenState extends State<CounterScreen> {
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-              const SizedBox(height: spaceSize),
               Text(
                 'Total QR Scans: ${state.qrScansCounter.value}',
                 style: Theme.of(context).textTheme.titleMedium,
@@ -153,24 +153,6 @@ class _CounterScreenState extends State<CounterScreen> {
                   tooltip: 'Increment',
                   icon: const Icon(Icons.add),
                   label: const Text('Increment'),
-                )
-              else
-                ElevatedButton.icon(
-                  onPressed: state.signInWithGoogle,
-                  icon: const Icon(Icons.login),
-                  label: const Text('Sign in with Google'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: spaceSize,
-                      horizontal: doubleSpaceSize,
-                    ),
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                 ),
             ],
           ),

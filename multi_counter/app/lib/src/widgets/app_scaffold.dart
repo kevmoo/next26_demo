@@ -9,12 +9,14 @@ class AppScaffold extends StatelessWidget {
   final Widget child;
   final String? title;
   final bool useCardGradient;
+  final VoidCallback? onSignInWithGoogle;
 
   const AppScaffold({
     super.key,
     required this.child,
     this.title,
     this.useCardGradient = false,
+    this.onSignInWithGoogle,
   });
 
   @override
@@ -74,6 +76,21 @@ class AppScaffold extends StatelessWidget {
                   icon: const Icon(Icons.logout),
                   onPressed: () => FirebaseAuth.instance.signOut(),
                 ),
+              ] else if (onSignInWithGoogle != null) ...[
+                const SizedBox(height: spaceSize),
+                ElevatedButton.icon(
+                  onPressed: onSignInWithGoogle,
+                  icon: const Icon(Icons.login),
+                  label: const Text('Sign in with Google'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
               ],
             ],
           ),
@@ -118,6 +135,21 @@ class AppScaffold extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.logout),
                     onPressed: () => FirebaseAuth.instance.signOut(),
+                  ),
+                ] else if (onSignInWithGoogle != null) ...[
+                  const Spacer(),
+                  ElevatedButton.icon(
+                    onPressed: onSignInWithGoogle,
+                    icon: const Icon(Icons.login),
+                    label: const Text('Sign in with Google'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                   ),
                 ],
               ],

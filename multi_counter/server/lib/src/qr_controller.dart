@@ -49,13 +49,15 @@ final class QrController {
   bool _isValidEmoji(String name) => emojiFields.containsKey(name);
 
   Future<void> _incrementField(
-    DocumentReference docRef,
+    DocumentReference<Map<String, Object?>> docRef,
     String fieldName,
   ) async {
     await _firestore.runTransaction<void>((transaction) async {
       final snapshot = await transaction.get(docRef);
       if (!snapshot.exists) {
-        transaction.set(docRef, {fieldName: 1});
+        transaction.set<Map<String, Object?>>(docRef, <String, Object?>{
+          fieldName: 1,
+        });
       } else {
         transaction.update(docRef, {fieldName: const FieldValue.increment(1)});
       }

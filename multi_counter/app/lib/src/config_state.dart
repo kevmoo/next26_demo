@@ -44,6 +44,6 @@ String get qrCodeUrl {
     final projectId = Firebase.app().options.projectId;
     return 'http://$_debugHost:$_debugFunctionsPort/$projectId/us-central1/$qrScanEndpoint';
   } else {
-    throw UnimplementedError();
+    return 'https://qr-scan-138342796561.us-central1.run.app/';
   }
 }

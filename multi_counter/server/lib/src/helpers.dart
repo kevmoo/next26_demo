@@ -22,7 +22,7 @@ Future<void> updateGlobalCount(Firestore firestore) async {
 
     final currentData = (await globalVars.get()).data() ?? <String, dynamic>{};
 
-    await globalVars.set({
+    await globalVars.set(<String, Object?>{
       ...currentData,
       totalCountField: globalCountValue,
       totalUsersField: userCountValue,
