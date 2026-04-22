@@ -32,3 +32,14 @@ HttpsCallable get incrementHttpsCallable {
     );
   }
 }
+
+HttpsCallable get qrScanHttpsCallable {
+  if (kDebugMode) {
+    return FirebaseFunctions.instance.httpsCallable(
+      qrScanEndpoint,
+      options: _options,
+    );
+  } else {
+    throw UnimplementedError();
+  }
+}

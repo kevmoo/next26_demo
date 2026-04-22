@@ -1,4 +1,5 @@
 import 'package:firebase_functions/firebase_functions.dart';
+import 'package:multi_counter_server/src/qr_controller.dart';
 import 'package:multi_counter_server/src/storage_controller.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 
@@ -22,5 +23,9 @@ void main(List<String> args) async {
         }
       },
     );
+
+    final qrController = QrController(firebase.adminApp.firestore());
+
+    firebase.https.onRequest(name: qrScanEndpoint, qrController.handleRequest);
   });
 }

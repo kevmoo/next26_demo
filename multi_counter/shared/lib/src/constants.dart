@@ -4,6 +4,10 @@
 const usersCollection = 'users';
 const countField = 'count';
 
+/// Document ID used in the `users` collection for tracking QR scans.
+const qrScansDocument = '_qr_scans';
+const qrScanCountField = 'scans';
+
 /// Firestore constants for the `global` collection.
 ///
 /// Hierarchy: `global` (collection) -> `vars` (document) ->
@@ -13,5 +17,16 @@ const varsDocument = 'vars';
 const totalCountField = 'totalCount';
 const totalUsersField = 'totalUsers';
 
-/// HTTPS Callable function names.
+const emojiFields = {
+  'emoji_blue_heart': '💙',
+  'emoji_dartboard': '🎯',
+  'emoji_plus': '➕',
+  'emoji_rocket': '🚀',
+};
+
+/// HTTPS endpoint names.
 const incrementCallable = 'increment';
+const qrScanEndpoint = 'qr_scan';
+
+/// Target URL for registration visits.
+const registrationVisitUrl = 'https://goo.gle/X-Google4-Learn26?r=qr';
