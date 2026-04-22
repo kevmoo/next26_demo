@@ -76,11 +76,25 @@ class _CounterScreenState extends State<CounterScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                appTitle,
-                style: Theme.of(context).textTheme.headlineMedium,
-                textAlign: TextAlign.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const FlutterLogo(size: 32),
+                  const SizedBox(width: 12),
+                  Text(
+                    appTitle,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(width: 12),
+                  Image.asset(
+                    'assets/firebase_logo.png',
+                    width: 32,
+                    height: 32,
+                  ),
+                ],
               ),
+
               _spacer,
               QrImageView(
                 data: qrCodeUrl,
