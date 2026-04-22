@@ -13,6 +13,12 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /users/_qr_scans {
+      allow read: if true;
+      allow write: if false;
+    }
+
+
     // Rules for the 'global' collection
     // Hierarchy: global (collection) -> vars (document) -> totalCount, totalUsers (fields)
     match /global/vars {

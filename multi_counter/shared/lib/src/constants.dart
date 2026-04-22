@@ -6,7 +6,6 @@ const countField = 'count';
 
 /// Document ID used in the `users` collection for tracking QR scans.
 const qrScansDocument = '_qr_scans';
-const qrScanCountField = 'scans';
 
 /// Firestore constants for the `global` collection.
 ///

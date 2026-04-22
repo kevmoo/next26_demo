@@ -17,6 +17,7 @@ dependencies:
   google_sign_in: any
   http: ^1.6.0
   multi_counter_shared: any
+  qr_flutter: ^4.1.0
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
 

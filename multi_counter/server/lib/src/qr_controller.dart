@@ -4,6 +4,8 @@ import 'package:firebase_functions/firebase_functions.dart';
 import 'package:google_cloud_firestore/google_cloud_firestore.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 
+import 'helpers.dart';
+
 final class QrController {
   final Firestore _firestore;
 
@@ -19,6 +21,8 @@ final class QrController {
       } else {
         await _incrementQrScan();
       }
+
+      await updateGlobalCount(_firestore);
 
       return Response.ok(
         _generateHtml(),
@@ -50,7 +54,7 @@ final class QrController {
 
   Future<void> _incrementQrScan() => _incrementField(
     _firestore.collection(usersCollection).doc(qrScansDocument),
-    qrScanCountField,
+    countField,
   );
 
   Future<void> _incrementEmoji(String emojiName) => _incrementField(

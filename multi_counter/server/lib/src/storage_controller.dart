@@ -1,6 +1,8 @@
 import 'package:google_cloud_firestore/google_cloud_firestore.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 
+import 'helpers.dart';
+
 class StorageController {
   final Firestore _firestore;
 
@@ -40,34 +42,7 @@ class StorageController {
     });
   }
 
-  Future<void> _updateGlobalCount() async {
-    final globalCountSnapshot = await _firestore
-        .collection(usersCollection)
-        .aggregate(const sum(countField), const count())
-        .get();
-
-    var globalCountRaw = globalCountSnapshot.getSum(countField);
-
-    if (globalCountRaw == null || globalCountRaw < 1) {
-      // TODO: we don't want to crash here, but we should log
-      print('Very weird value for global count: "$globalCountRaw');
-      globalCountRaw = 1;
-    }
-
-    final globalCountValue = globalCountRaw.toInt();
-    final userCountValue = globalCountSnapshot.count;
-
-    final globalVars = _firestore
-        .collection(globalCollection)
-        .doc(varsDocument);
-
-    // TODO: Investigate a more efficient way to do this
-    // Maybe with a trigger?
-    await globalVars.set({
-      totalCountField: globalCountValue,
-      totalUsersField: userCountValue,
-    });
-  }
+  Future<void> _updateGlobalCount() => updateGlobalCount(_firestore);
 
   Future<void> close() async {
     await _firestore.terminate();

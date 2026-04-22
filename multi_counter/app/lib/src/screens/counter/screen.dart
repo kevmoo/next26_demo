@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../config_state.dart';
 import '../../constants.dart';
 import '../../widgets/app_scaffold.dart';
 import 'state.dart';
@@ -27,6 +29,8 @@ class _CounterScreenState extends State<CounterScreen> {
       state.userCounter,
       state.globalCounter,
       state.currentUser,
+      state.qrScansCounter,
+      ...state.emojiCounters.values,
     ]);
 
     ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
@@ -76,6 +80,34 @@ class _CounterScreenState extends State<CounterScreen> {
                 appTitle,
                 style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.center,
+              ),
+              _spacer,
+              QrImageView(
+                data: qrCodeUrl,
+                size: 140.0,
+                eyeStyle: QrEyeStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                dataModuleStyle: QrDataModuleStyle(
+                  dataModuleShape: QrDataModuleShape.square,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              const SizedBox(height: spaceSize),
+              Text(
+                'Total QR Scans: ${state.qrScansCounter.value}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              _spacer,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: emojiFields.entries.map((e) {
+                  final count = state.emojiCounters[e.key]?.value ?? 0;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: AnimatedEmoji(emoji: e.value, count: count),
+                  );
+                }).toList(),
               ),
               _spacer,
               if (isLoggedIn) ...[
@@ -131,6 +163,81 @@ class _CounterScreenState extends State<CounterScreen> {
         );
       },
     ),
+  );
+}
+
+class AnimatedEmoji extends StatefulWidget {
+  final String emoji;
+  final int count;
+
+  const AnimatedEmoji({required this.emoji, required this.count, super.key});
+
+  @override
+  State<AnimatedEmoji> createState() => _AnimatedEmojiState();
+}
+
+class _AnimatedEmojiState extends State<AnimatedEmoji>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _dy;
+  late final Animation<double> _opacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+
+    _dy = Tween<double>(
+      begin: 0,
+      end: -60,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    _opacity = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.0), weight: 60),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 40),
+    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimatedEmoji oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.count > oldWidget.count) {
+      _controller.forward(from: 0.0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    alignment: Alignment.center,
+    clipBehavior: Clip.none,
+    children: [
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(widget.emoji, style: const TextStyle(fontSize: 28)),
+          Text('${widget.count}'),
+        ],
+      ),
+      AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) => Positioned(
+          top: _dy.value,
+          child: Opacity(
+            opacity: _opacity.value,
+            child: Text(widget.emoji, style: const TextStyle(fontSize: 28)),
+          ),
+        ),
+      ),
+    ],
   );
 }
 

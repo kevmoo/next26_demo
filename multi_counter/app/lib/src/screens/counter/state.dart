@@ -27,6 +27,11 @@ class CounterState {
     FirebaseAuth.instance.currentUser,
   );
 
+  final ValueNotifier<int> qrScansCounter = ValueNotifier(0);
+  final Map<String, ValueNotifier<int>> emojiCounters = {
+    for (var key in emojiFields.keys) key: ValueNotifier(0),
+  };
+
   final _incrementController = StreamController<void>.broadcast();
   final _subscriptions = <StreamSubscription>[];
   StreamSubscription<DocumentSnapshot>? _userSubscription;
@@ -72,18 +77,41 @@ class CounterState {
 
     _subscriptions.add(
       FirebaseFirestore.instance
+          .collection(usersCollection)
+          .doc(qrScansDocument)
+          .snapshots()
+          .listen((snapshot) {
+            if (snapshot.exists) {
+              final data = snapshot.data();
+              if (data != null && data.containsKey(countField)) {
+                qrScansCounter.value = data[countField] as int;
+              }
+            }
+          }, onError: (Object e) => print('Firestore error on _qr_scans: $e')),
+    );
+
+    _subscriptions.add(
+      FirebaseFirestore.instance
           .collection(globalCollection)
           .doc(varsDocument)
           .snapshots()
           .listen((snapshot) {
-            if (snapshot.data() case {
-              totalCountField: int totalClicks,
-              totalUsersField: int totalUsers,
-            }) {
-              globalCounter.value = (
-                totalUsers: totalUsers,
-                totalClicks: totalClicks,
-              );
+            if (snapshot.exists) {
+              final data = snapshot.data();
+              if (data != null) {
+                if (data.containsKey(totalCountField) &&
+                    data.containsKey(totalUsersField)) {
+                  globalCounter.value = (
+                    totalUsers: data[totalUsersField] as int,
+                    totalClicks: data[totalCountField] as int,
+                  );
+                }
+                for (var key in emojiFields.keys) {
+                  if (data.containsKey(key)) {
+                    emojiCounters[key]!.value = data[key] as int;
+                  }
+                }
+              }
             }
           }),
     );

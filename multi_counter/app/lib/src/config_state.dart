@@ -7,13 +7,19 @@ import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 import '../firebase_options.dart';
 
+const _debugHost = '127.0.0.1';
+const _debugFunctionsPort = 5001;
+
 Future<void> initializeWorld() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   if (kDebugMode) {
-    await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);
-    FirebaseFirestore.instance.useFirestoreEmulator('127.0.0.1', 8080);
-    FirebaseFunctions.instance.useFunctionsEmulator('127.0.0.1', 5001);
+    await FirebaseAuth.instance.useAuthEmulator(_debugHost, 9099);
+    FirebaseFirestore.instance.useFirestoreEmulator(_debugHost, 8080);
+    FirebaseFunctions.instance.useFunctionsEmulator(
+      _debugHost,
+      _debugFunctionsPort,
+    );
   }
 }
 
@@ -33,12 +39,10 @@ HttpsCallable get incrementHttpsCallable {
   }
 }
 
-HttpsCallable get qrScanHttpsCallable {
+String get qrCodeUrl {
   if (kDebugMode) {
-    return FirebaseFunctions.instance.httpsCallable(
-      qrScanEndpoint,
-      options: _options,
-    );
+    final projectId = Firebase.app().options.projectId;
+    return 'http://$_debugHost:$_debugFunctionsPort/$projectId/us-central1/$qrScanEndpoint';
   } else {
     throw UnimplementedError();
   }
