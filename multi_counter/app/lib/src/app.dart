@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'router.dart';
+import 'screens/counter/screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
+  Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Flutter Demo',
-    routerConfig: router,
+    home: const CounterScreen(),
     theme: ThemeData(
       useMaterial3: true,
       colorScheme: const ColorScheme.light(

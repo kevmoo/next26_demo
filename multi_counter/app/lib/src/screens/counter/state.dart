@@ -18,62 +18,93 @@ class CounterState {
         .listen(_handleIncrementResult);
 
     _initFirestore();
+    _listenToAuth();
   }
 
   final ValueNotifier<int> userCounter = ValueNotifier(0);
   final ValueNotifier<GlobalData?> globalCounter = ValueNotifier(null);
+  final ValueNotifier<User?> currentUser = ValueNotifier(
+    FirebaseAuth.instance.currentUser,
+  );
 
   final _incrementController = StreamController<void>.broadcast();
   final _subscriptions = <StreamSubscription>[];
+  StreamSubscription<DocumentSnapshot>? _userSubscription;
   final _responseController = StreamController<IncrementResponse>.broadcast();
 
   Stream<IncrementResponse> get incrementResponseStream =>
       _responseController.stream;
 
-  // TODO: consider creating shared constants for collection and field names.
-  // ...and putting them in the shared package.
-  void _initFirestore() {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid != null) {
-      _subscriptions.add(
-        FirebaseFirestore.instance
-            .collection(usersCollection)
-            .doc(uid)
-            .snapshots()
-            .listen((snapshot) {
-              if (snapshot.exists) {
-                final data = snapshot.data();
-                if (data != null && data.containsKey(countField)) {
-                  userCounter.value = data[countField] as int;
-                }
-              }
-            }),
-      );
+  void _listenToAuth() {
+    _subscriptions.add(
+      FirebaseAuth.instance.authStateChanges().listen((user) {
+        currentUser.value = user;
+        _updateUserSubscription(user);
+      }),
+    );
+  }
 
-      _subscriptions.add(
-        FirebaseFirestore.instance
-            .collection(globalCollection)
-            .doc(varsDocument)
-            .snapshots()
-            .listen((snapshot) {
-              if (snapshot.data() case {
-                totalCountField: int totalClicks,
-                totalUsersField: int totalUsers,
-              }) {
-                globalCounter.value = (
-                  totalUsers: totalUsers,
-                  totalClicks: totalClicks,
-                );
-              }
-            }),
+  void _updateUserSubscription(User? user) {
+    _userSubscription?.cancel();
+    _userSubscription = null;
+
+    if (user == null) {
+      userCounter.value = 0;
+      return;
+    }
+
+    _userSubscription = FirebaseFirestore.instance
+        .collection(usersCollection)
+        .doc(user.uid)
+        .snapshots()
+        .listen((snapshot) {
+          if (snapshot.exists) {
+            final data = snapshot.data();
+            if (data != null && data.containsKey(countField)) {
+              userCounter.value = data[countField] as int;
+            }
+          }
+        });
+  }
+
+  void _initFirestore() {
+    _updateUserSubscription(FirebaseAuth.instance.currentUser);
+
+    _subscriptions.add(
+      FirebaseFirestore.instance
+          .collection(globalCollection)
+          .doc(varsDocument)
+          .snapshots()
+          .listen((snapshot) {
+            if (snapshot.data() case {
+              totalCountField: int totalClicks,
+              totalUsersField: int totalUsers,
+            }) {
+              globalCounter.value = (
+                totalUsers: totalUsers,
+                totalClicks: totalClicks,
+              );
+            }
+          }),
+    );
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final googleProvider = GoogleAuthProvider()..addScope('email');
+      if (kDebugMode) {
+        await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      } else {
+        await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+      }
+    } catch (e) {
+      print('Google sign in error: $e');
+      _responseController.add(
+        IncrementResponse.failure('Sign in failed. Please try again.'),
       );
-    } else {
-      print('no uid');
     }
   }
 
-  // TODO: consider making this a nullable-property and disabling
-  // the button when we're waiting for the function to complete.
   void increment() {
     _incrementController.add(null);
   }
@@ -110,6 +141,7 @@ class CounterState {
   void dispose() {
     _responseController.close();
     _incrementController.close();
+    _userSubscription?.cancel();
     for (final sub in _subscriptions) {
       sub.cancel();
     }

@@ -19,15 +19,20 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     final size = MediaQuery.of(context).size;
     final isSmall = size.width < 370 || size.height < 650;
 
-    if (isSmall) {
-      return _buildSmallLayout(context, user);
-    }
-
-    return _buildLargeLayout(context, user);
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      initialData: FirebaseAuth.instance.currentUser,
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        if (isSmall) {
+          return _buildSmallLayout(context, user);
+        }
+        return _buildLargeLayout(context, user);
+      },
+    );
   }
 
   Widget _buildSmallLayout(BuildContext context, User? user) => Scaffold(

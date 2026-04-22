@@ -7,8 +7,8 @@ service cloud.firestore {
     match /users/{userId} {
       // Users can only read their own document
       allow read: if request.auth != null && request.auth.uid == userId;
-      
-      // Writes are handled by the backend (Cloud Functions) 
+
+      // Writes are handled by the backend (Cloud Functions)
       // which bypass these rules via service account privileges.
       allow write: if false;
     }
@@ -17,12 +17,12 @@ service cloud.firestore {
     // Hierarchy: global (collection) -> vars (document) -> totalCount, totalUsers (fields)
     match /global/vars {
       // Any authenticated user can read global stats
-      allow read: if request.auth != null;
-      
+      allow read: if true;
+
       // Writes are handled by the backend
       allow write: if false;
     }
-    
+
     // Default deny all for any other paths
     match /{path=**} {
       allow read, write: if false;

@@ -23,7 +23,11 @@ class _CounterScreenState extends State<CounterScreen> {
   void initState() {
     super.initState();
 
-    _merger = Listenable.merge([state.userCounter, state.globalCounter]);
+    _merger = Listenable.merge([
+      state.userCounter,
+      state.globalCounter,
+      state.currentUser,
+    ]);
 
     ScaffoldFeatureController<SnackBar, SnackBarClosedReason>?
     snackBarController;
@@ -60,6 +64,9 @@ class _CounterScreenState extends State<CounterScreen> {
       listenable: _merger,
       builder: (context, child) {
         final globalCount = state.globalCounter.value;
+        final user = state.currentUser.value;
+        final isLoggedIn = user != null;
+
         return SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -71,12 +78,14 @@ class _CounterScreenState extends State<CounterScreen> {
                 textAlign: TextAlign.center,
               ),
               _spacer,
-              const Text('You have pushed the button this many times:'),
-              Text(
-                '${state.userCounter.value}',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              _spacer,
+              if (isLoggedIn) ...[
+                const Text('You have pushed the button this many times:'),
+                Text(
+                  '${state.userCounter.value}',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                _spacer,
+              ],
               if (globalCount == null) const Text('...'),
               if (globalCount != null) ...[
                 const Text('Total button pushes:'),
@@ -92,12 +101,31 @@ class _CounterScreenState extends State<CounterScreen> {
                 ),
               ],
               _spacer,
-              FloatingActionButton.extended(
-                onPressed: state.increment,
-                tooltip: 'Increment',
-                icon: const Icon(Icons.add),
-                label: const Text('Increment'),
-              ),
+              if (isLoggedIn)
+                FloatingActionButton.extended(
+                  onPressed: state.increment,
+                  tooltip: 'Increment',
+                  icon: const Icon(Icons.add),
+                  label: const Text('Increment'),
+                )
+              else
+                ElevatedButton.icon(
+                  onPressed: state.signInWithGoogle,
+                  icon: const Icon(Icons.login),
+                  label: const Text('Sign in with Google'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: spaceSize,
+                      horizontal: doubleSpaceSize,
+                    ),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
             ],
           ),
         );

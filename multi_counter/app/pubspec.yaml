@@ -14,7 +14,6 @@ dependencies:
   firebase_core: ^4.4.0
   flutter:
     sdk: flutter
-  go_router: ^17.0.1
   google_sign_in: any
   http: ^1.6.0
   multi_counter_shared: any
