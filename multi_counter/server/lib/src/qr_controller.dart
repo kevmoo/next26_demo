@@ -15,7 +15,6 @@ final class QrController {
   QrController(this._firestore);
 
   Future<Response> handleRequest(Request request) async {
-    _instanceCount++;
     try {
       final queryParams = request.url.queryParameters;
       final emojiName = queryParams['emoji'];
@@ -31,6 +30,7 @@ final class QrController {
           headers: {'Content-Type': 'application/json'},
         );
       } else {
+        _instanceCount++;
         await _incrementQrScan();
         await updateGlobalCount(_firestore);
         return Response.ok(
@@ -107,7 +107,7 @@ final class QrController {
     p { color: #71717A; margin-top: 0; margin-bottom: 2rem; font-size: 1.125rem; }
     .emojis {
       display: flex;
-      gap: 1.5rem;
+      gap: 0.75rem;
       justify-content: center;
       margin-bottom: 3rem;
     }
@@ -160,7 +160,6 @@ final class QrController {
 </head>
 <body>
   <div class="emojis">
-
     ${emojiFields.entries.map((e) => '<a class="emoji-btn" onclick="handleEmojiClick(event, \'?emoji=${e.key}\')" href="?emoji=${e.key}">${e.value}</a>').join('\n    ')}
   </div>
 

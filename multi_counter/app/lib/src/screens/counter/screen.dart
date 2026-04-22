@@ -131,29 +131,28 @@ class _CounterScreenState extends State<CounterScreen> {
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 _spacer,
-              ],
-              if (globalCount == null) const Text('...'),
-              if (globalCount != null) ...[
-                const Text('Total button pushes:'),
-                Text(
-                  '${globalCount.totalClicks}',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
+                if (globalCount == null) const Text('...'),
+                if (globalCount != null) ...[
+                  const Text('Total button pushes:'),
+                  Text(
+                    '${globalCount.totalClicks}',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  _spacer,
+                  const Text('Total people who have pushed the button:'),
+                  Text(
+                    '${globalCount.totalUsers}',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ],
                 _spacer,
-                const Text('Total people who have pushed the button:'),
-                Text(
-                  '${globalCount.totalUsers}',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-              ],
-              _spacer,
-              if (isLoggedIn)
                 FloatingActionButton.extended(
                   onPressed: state.increment,
                   tooltip: 'Increment',
                   icon: const Icon(Icons.add),
                   label: const Text('Increment'),
                 ),
+              ],
             ],
           ),
         );
