@@ -14,28 +14,64 @@ String generateHtml({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Multi-Counter Engagement</title>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background-color: #FAFAFA;
-      color: #18181B;
-      text-align: center;
-      padding: 2rem 1rem;
-      max-width: 480px;
-      margin: 0 auto;
-      display: block;
+    :root {
+      --primary: #2563EB;
+      --primary-hover: #1D4ED8;
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --text-main: #18181B;
+      --text-muted: #52525B;
+      --border: #E4E4E7;
     }
 
-    h1 { margin-bottom: 0.5rem; font-size: 2rem; }
-    p { color: #71717A; margin-top: 0; margin-bottom: 2rem; font-size: 1.125rem; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+      transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 2.5rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .cta-button:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.23);
+    }
+
     .emojis {
       display: flex;
-      gap: 0.75rem;
+      gap: 1rem;
       justify-content: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
     }
     .emoji-btn {
-      background: white;
-      border: 1px solid #E4E4E7;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 16px;
       font-size: 2.5rem;
       padding: 1rem;
@@ -43,6 +79,8 @@ String generateHtml({
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       transition: transform 0.2s, box-shadow 0.2s;
       text-decoration: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
     .emoji-btn:hover {
       transform: translateY(-4px);
@@ -51,41 +89,93 @@ String generateHtml({
     .emoji-btn.clicked {
       animation: floatAndFade 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
+
     @keyframes floatAndFade {
       0% { transform: translateY(0) scale(1); opacity: 1; }
       100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
     }
+
+    @media (max-width: 450px) {
+      body { padding: 2.5rem 1rem; }
+      .emojis { gap: 0.5rem; }
+      .emoji-btn { font-size: 2rem; padding: 0.75rem; border-radius: 12px; }
+    }
+
+    .hint-text {
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      font-size: 1rem;
+    }
+
+    .metrics-container {
+      width: 100%;
+      background-color: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin: 0 auto 1rem auto;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      display: flex;
+      justify-content: center;
+      padding: 1.25rem 1.5rem;
+      box-sizing: border-box;
+      overflow-x: auto;
+    }
+
+    #metrics {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      color: #3F3F46;
+      font-size: 0.9rem;
+      text-align: left;
+      line-height: 1.5;
+      margin: 0;
+    }
+
     .link {
-      color: #2563EB;
+      color: var(--primary);
       text-decoration: none;
       font-weight: 600;
       font-size: 1.125rem;
+      margin-bottom: 2rem;
+      display: inline-block;
     }
     .link:hover { text-decoration: underline; }
-    .cta-button {
-      display: inline-block;
-      background-color: #2563EB;
-      color: white;
-      font-weight: 600;
-      font-size: 1.25rem;
-      padding: 1rem 2rem;
-      border-radius: 12px;
+
+    .footer {
+      margin-top: auto;
+      padding-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      width: 100%;
+    }
+    .footer-text {
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+    .footer-link {
       text-decoration: none;
-      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-      transition: background-color 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
     }
-    .cta-button:hover {
-      background-color: #1D4ED8;
-      transform: translateY(-2px);
-    }
+    .footer-link:hover { opacity: 0.8; }
+    .dart-link { color: #01579B; }
+    .cloud-run-link { color: #EA4335; }
   </style>
   <script>
     const emojiMap = ${jsonEncode(emojiFields)};
 
     function updateMetrics(uptime, count, emojiCounts) {
-      let text = `Uptime:        \${uptime}\\nLoad Count: \${String(count).padStart(14, ' ')}\\n\\n`;
+      let text = `Instance stats:\nUptime:         \${uptime}\\nLoad Count:  \${String(count).padStart(14, ' ')}\\n\\n`;
+
+      text += `Global counts:\n`;
       for (const [key, emoji] of Object.entries(emojiMap)) {
-        text += `\${emoji}:\${emojiCounts[key] || 0} `;
+        text += `\${emoji} \${emojiCounts[key] || 0}   `;
       }
       document.getElementById('metrics').innerText = text.trim();
     }
@@ -108,20 +198,32 @@ String generateHtml({
 </head>
 <body>
   <a class="cta-button" href="$registrationVisitUrl" target="_blank">Click here to register your visit</a>
-  <br><br>
+
   <div class="emojis">
     ${emojiFields.entries.map((e) => '<a class="emoji-btn" onclick="handleEmojiClick(event, \'?emoji=${e.key}\')" href="?emoji=${e.key}">${e.value}</a>').join('\n    ')}
   </div>
-  <p style="margin-top: -1.5rem; margin-bottom: 1rem; color: #52525B; font-style: italic;">Look at the big screen when you click!</p>
+  
+  <p class="hint-text">Look at the big screen when you click!</p>
 
-  <pre id="metrics" style="font-family: monospace; color: #71717A; background-color: #F4F4F5; padding: 1rem; border-radius: 8px; border: 1px solid #E4E4E7; margin-top: 0.5rem; font-size: 0.875rem; display: inline-block; text-align: left;"></pre>
+  <div class="metrics-container">
+    <pre id="metrics"></pre>
+  </div>
 
   <p>
-  <a class="link" href="https://firebase.google.com/docs/functions/start-dart" target="_blank">Get Started with Dart and Firebase Functions</a>
+  This is an HTML page returned from an ahead-of-time compiled, native
+  Dart function running on Cloud Run.
   </p>
-  <div style="margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 1.5rem;">
-    Powered by
-    <a href="https://dart.dev" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #01579B; font-family: sans-serif;">
+  <p>
+  The Flutter and Firebase launch web application is
+  <a href="https://n26-full-stack-dart.firebaseapp.com/">here</a>.
+  </p>
+  <p>
+  <a href="https://firebase.google.com/docs/functions/start-dart" target="_blank">Get Started with Dart and Firebase Functions</a>
+  </p>
+
+  <div class="footer">
+    <span class="footer-text">Powered by</span>
+    <a href="https://dart.dev" target="_blank" class="footer-link dart-link">
       <svg width="24" height="24" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g>
           <path fill="#01579B" d="M225.6,852.14L44.84,671.38c-21.41-22.01-34.76-53.08-34.76-83.43c0-14.05,7.94-36.03,13.9-48.67 l166.86-347.62L225.6,852.14z"/>
@@ -132,9 +234,8 @@ String generateHtml({
         </g>
       </svg>
       Dart
-
     </a>
-    <a href="https://cloud.google.com/run" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #EA4335; font-family: sans-serif;">
+    <a href="https://cloud.google.com/run" target="_blank" class="footer-link cloud-run-link">
       <svg id="standard_product_icon" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 512 512" width="24" height="24">
         <defs>
           <style>
@@ -160,6 +261,7 @@ String generateHtml({
       Cloud Run
     </a>
   </div>
+
   <script>
     const initialEmojiCounts = ${jsonEncode(emojiCounts)};
     updateMetrics('$uptime', $instanceCount, initialEmojiCounts);
