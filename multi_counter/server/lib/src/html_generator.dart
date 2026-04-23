@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 
-String generateHtml({required String uptime, required int instanceCount}) =>
-    _minifyHtml('''
+String generateHtml({
+  required String uptime,
+  required int instanceCount,
+  required Map<String, int> emojiCounts,
+}) => _minifyHtml('''
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +31,7 @@ String generateHtml({required String uptime, required int instanceCount}) =>
       display: flex;
       gap: 0.75rem;
       justify-content: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
     }
     .emoji-btn {
       background: white;
@@ -59,8 +62,34 @@ String generateHtml({required String uptime, required int instanceCount}) =>
       font-size: 1.125rem;
     }
     .link:hover { text-decoration: underline; }
+    .cta-button {
+      display: inline-block;
+      background-color: #2563EB;
+      color: white;
+      font-weight: 600;
+      font-size: 1.25rem;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+      transition: background-color 0.2s, transform 0.2s;
+    }
+    .cta-button:hover {
+      background-color: #1D4ED8;
+      transform: translateY(-2px);
+    }
   </style>
   <script>
+    const emojiMap = ${jsonEncode(emojiFields)};
+
+    function updateMetrics(uptime, count, emojiCounts) {
+      let text = `Uptime:        \${uptime}\\nLoad Count: \${String(count).padStart(14, ' ')}\\n\\n`;
+      for (const [key, emoji] of Object.entries(emojiMap)) {
+        text += `\${emoji}:\${emojiCounts[key] || 0} `;
+      }
+      document.getElementById('metrics').innerText = text.trim();
+    }
+
     function handleEmojiClick(event, href) {
       event.preventDefault();
       const btn = event.currentTarget;
@@ -68,7 +97,7 @@ String generateHtml({required String uptime, required int instanceCount}) =>
       fetch(href)
         .then(res => res.json())
         .then(data => {
-          document.getElementById('metrics').innerText = `Instance Uptime: \${data.uptime}\\nInstance Request Count: \${data.count}\\n(Current Cloud instance)`;
+          updateMetrics(data.uptime, data.count, data.emojiCounts);
           setTimeout(() => {
             btn.classList.remove('clicked');
           }, 400);
@@ -78,23 +107,21 @@ String generateHtml({required String uptime, required int instanceCount}) =>
   </script>
 </head>
 <body>
+  <a class="cta-button" href="$registrationVisitUrl" target="_blank">Click here to register your visit</a>
+  <br><br>
   <div class="emojis">
     ${emojiFields.entries.map((e) => '<a class="emoji-btn" onclick="handleEmojiClick(event, \'?emoji=${e.key}\')" href="?emoji=${e.key}">${e.value}</a>').join('\n    ')}
   </div>
+  <p style="margin-top: -1.5rem; margin-bottom: 1rem; color: #52525B; font-style: italic;">Look at the big screen when you click!</p>
 
-  <a class="link" href="$registrationVisitUrl" target="_blank">Click here to register your visit</a>
-  <br><br>
-  <a class="link" href="https://firebase.google.com/docs/functions/start-dart" target="_blank">Get Started with Dart and FirebaseFunctions</a>
-  <br>
-  <br>
-  <pre id="metrics" style="font-family: monospace; color: #71717A; background-color: #F4F4F5; padding: 1rem; border-radius: 8px; border: 1px solid #E4E4E7; margin-top: 2rem; font-size: 0.875rem; display: inline-block; text-align: left;">
-Instance Uptime: $uptime
-Instance Request Count: $instanceCount
-(Current Cloud instance)</pre>
+  <pre id="metrics" style="font-family: monospace; color: #71717A; background-color: #F4F4F5; padding: 1rem; border-radius: 8px; border: 1px solid #E4E4E7; margin-top: 0.5rem; font-size: 0.875rem; display: inline-block; text-align: left;"></pre>
 
+  <p>
+  <a class="link" href="https://firebase.google.com/docs/functions/start-dart" target="_blank">Get Started with Dart and Firebase Functions</a>
+  </p>
   <div style="margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 1.5rem;">
     Powered by
-    <span style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #01579B; font-family: sans-serif;">
+    <a href="https://dart.dev" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #01579B; font-family: sans-serif;">
       <svg width="24" height="24" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g>
           <path fill="#01579B" d="M225.6,852.14L44.84,671.38c-21.41-22.01-34.76-53.08-34.76-83.43c0-14.05,7.94-36.03,13.9-48.67 l166.86-347.62L225.6,852.14z"/>
@@ -106,8 +133,8 @@ Instance Request Count: $instanceCount
       </svg>
       Dart
 
-    </span>
-    <span style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #EA4335; font-family: sans-serif;">
+    </a>
+    <a href="https://cloud.google.com/run" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; font-weight: 600; color: #EA4335; font-family: sans-serif;">
       <svg id="standard_product_icon" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 512 512" width="24" height="24">
         <defs>
           <style>
@@ -131,11 +158,17 @@ Instance Request Count: $instanceCount
         </g>
       </svg>
       Cloud Run
-    </span>
+    </a>
   </div>
+  <script>
+    const initialEmojiCounts = ${jsonEncode(emojiCounts)};
+    updateMetrics('$uptime', $instanceCount, initialEmojiCounts);
+  </script>
 </body>
 </html>
 ''');
 
+/// Stripping out the leading/trailing whitespace from each line to make things
+/// a bit smaller over the wire.
 String _minifyHtml(String html) =>
     const LineSplitter().convert(html).map((line) => line.trim()).join('\n');

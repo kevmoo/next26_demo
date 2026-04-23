@@ -27,6 +27,7 @@ final class QrController {
           jsonEncode({
             'uptime': _formatDuration(DateTime.now().difference(_startTime)),
             'count': _instanceCount,
+            'emojiCounts': await _getEmojiCounts(),
           }),
           headers: {'Content-Type': 'application/json'},
         );
@@ -38,6 +39,7 @@ final class QrController {
           generateHtml(
             uptime: _formatDuration(DateTime.now().difference(_startTime)),
             instanceCount: _instanceCount,
+            emojiCounts: await _getEmojiCounts(),
           ),
           headers: {'Content-Type': 'text/html; charset=utf-8'},
         );
@@ -51,6 +53,17 @@ final class QrController {
   }
 
   bool _isValidEmoji(String name) => emojiFields.containsKey(name);
+
+  Future<Map<String, int>> _getEmojiCounts() async {
+    final globalVarsSnapshot =
+        await _firestore.collection(globalCollection).doc(varsDocument).get();
+    final data = globalVarsSnapshot.data() ?? <String, dynamic>{};
+    final emojiCounts = <String, int>{};
+    for (var key in emojiFields.keys) {
+      emojiCounts[key] = (data[key] as num?)?.toInt() ?? 0;
+    }
+    return emojiCounts;
+  }
 
   Future<void> _incrementField(
     DocumentReference<Map<String, Object?>> docRef,
@@ -79,9 +92,9 @@ final class QrController {
   );
 
   String _formatDuration(Duration d) {
-    final hours = d.inHours;
-    final minutes = d.inMinutes.remainder(60);
-    final seconds = d.inSeconds.remainder(60);
+    final hours = d.inHours.toString().padLeft(2, '0');
+    final minutes = d.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = d.inSeconds.remainder(60).toString().padLeft(2, '0');
     return '${hours}h ${minutes}m ${seconds}s';
   }
 }
