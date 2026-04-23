@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../config_state.dart';
 import '../../constants.dart';
@@ -97,17 +98,26 @@ class _CounterScreenState extends State<CounterScreen> {
               ),
 
               _spacer,
-              QrImageView(
-                data: qrCodeUrl,
-                size: 240.0,
-                eyeStyle: QrEyeStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                dataModuleStyle: QrDataModuleStyle(
-                  dataModuleShape: QrDataModuleShape.square,
-                  color: Theme.of(context).colorScheme.primary,
+              InkWell(
+                onTap: () => launchUrl(Uri.parse(qrCodeUrl)),
+                child: Column(
+                  children: [
+                    QrImageView(
+                      data: qrCodeUrl,
+                      size: 240.0,
+                      eyeStyle: QrEyeStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      dataModuleStyle: QrDataModuleStyle(
+                        dataModuleShape: QrDataModuleShape.square,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    const Text('(Scan or click)'),
+                  ],
                 ),
               ),
+              _spacer,
               Text(
                 'Total QR Scans: ${state.qrScansCounter.value}',
                 style: Theme.of(context).textTheme.titleMedium,

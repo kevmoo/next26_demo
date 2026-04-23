@@ -25,7 +25,7 @@ const emojiFields = {
 
 /// HTTPS endpoint names.
 const incrementCallable = 'increment';
-const qrScanEndpoint = 'qr_scan';
+const qrScanEndpoint = 'qr-scan';
 
 /// Target URL for registration visits.
 const registrationVisitUrl = 'https://goo.gle/X-Google4-Learn26?r=qr';
