@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
 import 'about_popup.dart';
@@ -50,8 +51,10 @@ class AppScaffold extends StatelessWidget {
             children: [
               // Content
               child,
-
               const SizedBox(height: doubleSpaceSize),
+              _poweredBy(context),
+
+              const SizedBox(height: spaceSize),
 
               // About
               TextButton.icon(
@@ -100,7 +103,17 @@ class AppScaffold extends StatelessWidget {
   );
 
   Widget _buildLargeLayout(BuildContext context, User? user) => Scaffold(
-    body: CenteredPremiumCard(useGradient: useCardGradient, child: child),
+    body: Column(
+      children: [
+        Expanded(
+          child: CenteredPremiumCard(
+            useGradient: useCardGradient,
+            child: child,
+          ),
+        ),
+        _poweredBy(context),
+      ],
+    ),
     bottomNavigationBar: SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -160,3 +173,40 @@ class AppScaffold extends StatelessWidget {
     ),
   );
 }
+
+Widget _poweredBy(BuildContext context) => Column(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    const Text('Powered by'),
+    Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          onTap: () => launchUrl(Uri.parse('https://flutter.dev')),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FlutterLogo(size: 32),
+              SizedBox(width: 8),
+              Text('Flutter'),
+            ],
+          ),
+        ),
+        const SizedBox(width: 16),
+        InkWell(
+          onTap: () => launchUrl(
+            Uri.parse('https://firebase.google.com/docs/functions/start-dart'),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset('assets/firebase_logo.png', width: 32, height: 32),
+              const SizedBox(width: 8),
+              const Text('Firebase'),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ],
+);

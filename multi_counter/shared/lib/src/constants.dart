@@ -20,7 +20,7 @@ const emojiFields = {
   'emoji_blue_heart': '💙',
   'emoji_dartboard': '🎯',
   'emoji_plus': '➕',
-  'emoji_rocket': '🚀',
+  'emoji_gold_medal': '🥇',
 };
 
 /// HTTPS endpoint names.

@@ -117,7 +117,7 @@ class _CounterScreenState extends State<CounterScreen> {
                   ],
                 ),
               ),
-              _spacer,
+              const SizedBox(height: doubleSpaceSize / 2),
               Text(
                 'Total QR Scans: ${state.qrScansCounter.value}',
                 style: Theme.of(context).textTheme.titleMedium,
@@ -133,8 +133,8 @@ class _CounterScreenState extends State<CounterScreen> {
                   );
                 }).toList(),
               ),
-              _spacer,
               if (isLoggedIn) ...[
+                _spacer,
                 const Text('You have pushed the button this many times:'),
                 Text(
                   '${state.userCounter.value}',
