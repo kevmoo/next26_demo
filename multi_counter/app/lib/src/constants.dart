@@ -6,3 +6,6 @@ const double doubleSpaceSize = spaceSize * 2;
 // TODO: Update this to the final example URI
 const githubDisplayUrl = 'github.com/kevmoo/next26_demo';
 final githubUri = Uri.parse('https://$githubDisplayUrl');
+
+const projectNumber = '138342796561';
+const region = 'us-central1';

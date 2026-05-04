@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 import '../firebase_options.dart';
+import 'constants.dart';
 
 const _debugHost = '127.0.0.1';
 const _debugFunctionsPort = 5001;
@@ -25,25 +26,17 @@ Future<void> initializeWorld() async {
 
 final _options = HttpsCallableOptions(timeout: const Duration(seconds: 15));
 
-HttpsCallable get incrementHttpsCallable {
-  if (kDebugMode) {
-    return FirebaseFunctions.instance.httpsCallable(
-      incrementCallable,
-      options: _options,
-    );
-  } else {
-    return FirebaseFunctions.instance.httpsCallableFromUrl(
-      'https://increment-138342796561.us-central1.run.app',
-      options: _options,
-    );
-  }
-}
+HttpsCallable get incrementHttpsCallable => FirebaseFunctions.instance
+    .httpsCallableFromUrl(_functionUrl(incrementCallable), options: _options);
 
-String get qrCodeUrl {
+String get qrCodeUrl => _functionUrl(qrScanEndpoint);
+
+/// Base URL for remote functions.
+String _functionUrl(String name) {
   if (kDebugMode) {
     final projectId = Firebase.app().options.projectId;
-    return 'http://$_debugHost:$_debugFunctionsPort/$projectId/us-central1/$qrScanEndpoint';
+    return 'http://$_debugHost:$_debugFunctionsPort/$projectId/$region/$name';
   } else {
-    return 'https://qr-scan-138342796561.us-central1.run.app/';
+    return 'https://$name-$projectNumber.$region.run.app';
   }
 }
