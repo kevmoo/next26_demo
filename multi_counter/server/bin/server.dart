@@ -4,7 +4,7 @@ import 'package:multi_counter_server/src/storage_controller.dart';
 import 'package:multi_counter_shared/multi_counter_shared.dart';
 
 void main(List<String> args) async {
-  await fireUp(args, (firebase) async {
+  await runFunctions((firebase) async {
     final storageController = StorageController(firebase.adminApp.firestore());
 
     firebase.https.onCall(

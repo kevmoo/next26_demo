@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   firebase_admin_sdk: ^0.5.0
-  firebase_functions: ^0.5.0
+  firebase_functions: ^0.6.0
   google_cloud_firestore: ^0.5.0
   multi_counter_shared: any # workspace
 
